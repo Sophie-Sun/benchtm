@@ -12,19 +12,22 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Get started with benchtm">
-<meta property="og:description" content="">
+<meta property="og:description" content="benchtm">
 <meta property="og:image" content="/logo.png">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -83,10 +80,11 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Get started with benchtm</h1>
+      <h1 data-toc-skip>Get started with benchtm</h1>
             
       
       
@@ -97,15 +95,16 @@
     
     
 <p>R package “benchtm” can be used to generate data for the comparison of subgroup identification algorithms. To start with, we can directly load the library using:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(benchtm, <span class="dt">lib.loc=</span><span class="st">"/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyverse)</a></code></pre></div>
-<div id="data-generation-framework" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-generation-framework" class="anchor"></a>Data Generation Framework</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">benchtm</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="data-generation-framework">Data Generation Framework<a class="anchor" aria-label="anchor" href="#data-generation-framework"></a>
+</h2>
 <p>Consider a two-arm study where trt = 0 represents control arm and trt = 1 represents treatment arm, the clinical outcome/response <span class="math inline">\(Y\)</span> is generated from</p>
-<span class="math display">\[\begin{equation}
+<p><span class="math display">\[\begin{equation}
 \mathbb{E} (Y|X) = g(f(X)) = g(f_{prog}(X) + trt*(\beta_0 + \beta_1 f_{pred}(X))),
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>where <span class="math inline">\(g(\cdot)\)</span> is the link function and <span class="math inline">\(f_{prog}(X)\)</span> is the functional form of the prognostic variables and <span class="math inline">\(f_{pred}(X)\)</span> is the functional form of the predictive variables; <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are the coefficients of main treatment effect and the predictive effects respectively. From the data generation formula one can see that, the larger the <span class="math inline">\(\beta_0\)</span>, the more power there is to detect the overall treatment effect. The parameter <span class="math inline">\(\beta_1\)</span> determines the treatment effect variability (increasing if <span class="math inline">\(|\beta_1|\)</span> gets larger). Larger <span class="math inline">\(|\beta_1|\)</span> implies that it is more likely to detect the subgroup. <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> together determine the overall treatment effect. The function <code>generate_y</code> can be used to generate the outcome values <span class="math inline">\(y\)</span>.</p>
 <p>To generate the binary treatment variable, we consider <span class="math display">\[P(trt = 1|X) = \frac{1}{1+\exp(-h(X))}\]</span> where <span class="math inline">\(h(X)\)</span> is a user specified form. When <span class="math inline">\(h(X) = 0\)</span>, <span class="math inline">\(P(trt = 1|X) = 0.5\)</span> represents a setting for complete randomized design (have a look at the function <code>generate_trt</code> for details).</p>
 <p>Depending on different types of responses, the link function <span class="math inline">\(g(\cdot)\)</span> and how the clinical endpoints are generated are given as:</p>
@@ -116,70 +115,74 @@
 <li>Time-to-event response: <span class="math inline">\(g(x) = e^x\)</span> and <span class="math inline">\(t\sim \text{Exponential}(\lambda = g(f(X)))\)</span>.</li>
 </ul>
 </div>
-<div id="example-of-using-benchtm-package" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-of-using-benchtm-package" class="anchor"></a>Example of using ``benchtm’’ package</h2>
+<div class="section level2">
+<h2 id="example-of-using-benchtm-package">Example of using ``benchtm’’ package<a class="anchor" aria-label="anchor" href="#example-of-using-benchtm-package"></a>
+</h2>
 <p>In this section we provide an example of using “benchtm” package to generate a dataset for subgroup identification problem.</p>
 <p>For the covariates, one can either utilize a user-specified dataset or generate them from the function <code>generate_X_dist</code> (generate covariates from a pre-specified distribution) or <code>generate_X_syn</code> (generate data from synthetic data from a specific real trial). See each corresponding function for more details.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1111</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">X &lt;-<span class="st"> </span><span class="kw"><a href="../reference/generate_X_dist.html">generate_X_dist</a></span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">p=</span><span class="dv">10</span>, <span class="dt">rho=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#observational data set</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">trt &lt;-<span class="st"> </span><span class="kw"><a href="../reference/generate_trt.html">generate_trt</a></span>(<span class="dt">n=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(X), <span class="dt">p_trt =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/generate_y.html">generate_y</a></span>(X, trt, <span class="dt">prog =</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">                   <span class="dt">pred =</span> <span class="st">"X3&gt;0"</span>, <span class="dt">b0 =</span> <span class="dv">0</span>, <span class="dt">b1 =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">                   <span class="dt">type =</span> <span class="st">"continuous"</span>, <span class="dt">sigma_error =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(dat)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;   trt X1         X2          X3          X4 X5 X6          X7         X8</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; 1   0  N 0.03125259  0.09421509  0.51514432  N M2 -0.98045591  0.1306782</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; 2   1  N 0.83737617 -1.09363394 -0.55371671  N M3  1.99750426  0.2235778</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; 3   0  Y 1.18467412  2.28562630  0.13729403  Y M1  1.59946889 -1.0619646</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 4   0  N 1.87707398  0.93545962 -0.52007261  N M2  0.12848242  0.8768221</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; 5   1  Y 0.59686419  0.16525676  0.20060728  N M2 -0.08869092  0.9582106</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 6   1  Y 2.00749871 -0.08007514  0.08383461  Y M3 -0.75252169  1.6078133</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt;            X9        X10          Y</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; 1 -2.71313108  0.6942494  1.1067937</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; 2  0.87700756  1.0092612 -2.6188408</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; 3 -0.07447738 -0.1410665  3.6697095</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; 4 -0.11605592  0.4896499 -0.8245078</span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; 5 -0.97397058  0.1617459  2.4050540</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; 6 -0.30708657  0.1690040  4.9389464</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1111</span><span class="op">)</span>
+<span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">1000</span>, p<span class="op">=</span><span class="fl">10</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span>
+<span class="co">#observational data set</span>
+<span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_y.html">generate_y</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,
+                   pred <span class="op">=</span> <span class="st">"X3&gt;0"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,
+                   type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
+<span class="co">#&gt;   trt X1         X2          X3          X4 X5 X6          X7         X8</span>
+<span class="co">#&gt; 1   0  N 0.03125259  0.09421509  0.51514432  N M2 -0.98045591  0.1306782</span>
+<span class="co">#&gt; 2   1  N 0.83737617 -1.09363394 -0.55371671  N M3  1.99750426  0.2235778</span>
+<span class="co">#&gt; 3   0  Y 1.18467412  2.28562630  0.13729403  Y M1  1.59946889 -1.0619646</span>
+<span class="co">#&gt; 4   0  N 1.87707398  0.93545962 -0.52007261  N M2  0.12848242  0.8768221</span>
+<span class="co">#&gt; 5   1  Y 0.59686419  0.16525676  0.20060728  N M2 -0.08869092  0.9582106</span>
+<span class="co">#&gt; 6   1  Y 2.00749871 -0.08007514  0.08383461  Y M3 -0.75252169  1.6078133</span>
+<span class="co">#&gt;            X9        X10          Y</span>
+<span class="co">#&gt; 1 -2.71313108  0.6942494  1.1067937</span>
+<span class="co">#&gt; 2  0.87700756  1.0092612 -2.6188408</span>
+<span class="co">#&gt; 3 -0.07447738 -0.1410665  3.6697095</span>
+<span class="co">#&gt; 4 -0.11605592  0.4896499 -0.8245078</span>
+<span class="co">#&gt; 5 -0.97397058  0.1617459  2.4050540</span>
+<span class="co">#&gt; 6 -0.30708657  0.1690040  4.9389464</span></code></pre></div>
 <p>The treatment is generated based on randomized trial where <span class="math inline">\(P(trt = 1) = 0.5\)</span>. We could fit a conditional tree using this generated data.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">cov.names &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">"X"</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>()</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">eqn &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Y ~ trt| "</span>,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">              <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(cov.names, <span class="dt">collapse =</span> <span class="st">"+"</span>))</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">glmtr &lt;-<span class="st"> </span>partykit<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/partykit/topics/glmtree">glmtree</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/formula">as.formula</a></span>(eqn), <span class="dt">data =</span> dat, <span class="dt">family =</span> <span class="st">"gaussian"</span>,</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">                           <span class="dt">minsize =</span> <span class="fl">0.2</span><span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(dat))</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(glmtr)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cov.names</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"X"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">eqn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Y ~ trt| "</span>,
+              <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cov.names</span>, collapse <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">glmtr</span> <span class="op">&lt;-</span> <span class="fu">partykit</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/partykit/man/glmtree.html" class="external-link">glmtree</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">eqn</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>,
+                           minsize <span class="op">=</span> <span class="fl">0.2</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">glmtr</span><span class="op">)</span></code></pre></div>
 <p><img src="a01_User_guidance_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Based on the results, one can see that <span class="math inline">\(X_3\)</span> is selected as the split variable. The subgroup with <span class="math inline">\(X_3&gt;0.061\)</span> has the largest treatment effect.</p>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#data-generation-framework">Data Generation Framework</a></li>
-      <li><a href="#example-of-using-benchtm-package">Example of using ``benchtm’’ package</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
-  <p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p>
+<p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
+
       </footer>
 </div>
+
+  
+
 
   
 

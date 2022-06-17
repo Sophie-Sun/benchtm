@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 R package "benchtm" can be used to generate data for the comparison of subgroup identification algorithms. To start with, we can directly load the library using:
 
 ```{r}
-library(benchtm, lib.loc="/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+library(benchtm)
 library(tidyverse)
 ```
 

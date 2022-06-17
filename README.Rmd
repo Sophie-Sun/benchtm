@@ -41,13 +41,16 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-You can directly use the current version of `{benchtm}` with:
+To install R package `{benchtm}`:
 
 ``` {r, eval = FALSE}
-library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+devtools::install_github("Sophie-Sun/benchtm")
 ```
 
-## Developers 
+## How to use the package
+An .html vignette with introduction to package can be previewed [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Sophie-Sun/benchtm/master/docs/articles/index.html).
+
+## Contact us
 - [Sophie Sun](mailto:sophie.sun@novartis.com)
 - [Ardalan Mirshani](mailto:ardalan.mirshani@novartis.com)
 - [Bjoern Bornkamp](mailto:bjoern.bornkamp@novartis.com)

@@ -27,7 +27,7 @@ In this section a simple simulation study is performed on subgroup identificatio
 We generate the simulation data with $f_{prog}(X) = 0.5*(X_3+X_7)$ and $f_{pred}(X) = X_3$ with $\beta_0 =0, \beta_1=2$. We fix the total number of covariates as $p=20$ and vary the sample size from $n = 200$ to $n = 1000$. The simulation is replicated for 100 times in each scenario. 
 
 ```{r eval = FALSE}
-library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+library(benchtm)
 library(tidyverse)
 library(glmnet)
 
