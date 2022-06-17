@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: benchtm
+title: R package benchtm
 message: please cite this benchtm package when use it
 type: software
 authors:
