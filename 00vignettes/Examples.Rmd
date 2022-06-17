@@ -1,0 +1,149 @@
+<!--
+---
+title: "User guidance for 'benchtm'"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{User guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+R package "benchtm" is a package used to generate data for the subgroup identification comparison. In this article, several ways of generating data will be introduced. To start with, we can directly load the library using
+
+```{r, warning=FALSE, message=FALSE}
+library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+library(tidyverse)
+```
+
+## Generating data use $\beta_0$ and $\beta_1$
+As is discussed in data generation framework, data is generated using formula
+
+\begin{equation}
+f(X) = f_{prog}(X) + Trt*(\beta_0 + \beta_1 f_{pred}(X)),
+\end{equation}
+
+Given covariates and $\beta_0$ and $\beta_1$, a easy way to generate data is
+
+```{r, warning = FALSE, message = FALSE}
+## generate data from pre-specified distributions
+dat1 <- generate_data(n = 100, p = 30, data_type = "dist",
+                   prop = 0, prog = "0.5*((X1=='Y')+X3)", pred = "X3>0",
+                   b0 = 0, b1 = 2, type = "continuous", 
+                   include_truth = F, sigma_error = 1)
+str(dat1)
+
+## generate data from synthetic data
+dat2 <- generate_data(n = 100, p = 30, data_type = "syn",
+                   prop = 0,
+                   prog = "10 + 0.5*(X1=='N')-0.2*X11",
+                   pred = "X1=='N'",
+                   b0 = -2, b1 = -1, type = "survival",
+                   include_truth = F, cens_time = 2)
+## cens_time: censoring time for all patients, only for type = "survival"
+str(dat2)
+
+## generate data from user specified data
+X <- sapply(1:10, function(ii) {rnorm(500)})
+X <- as.data.frame(X)
+colnames(X) <- paste0("Z", 1:10)  
+dat3 <- generate_data(n = 100, p = 30, data_type = "user", X = X,
+                     prop = "Z4", prog = "0.5*(Z7+Z3)", pred = "Z2>0",
+                     b0 = 0, sd_te = 0.5,
+                     type = "count")
+str(dat3)
+
+```
+
+As there are two type of covariates structure (corresponding to data_type "dist" and "syn"), see [covariates_structure](http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/covariates_structure.html) for more details. In this example we choose "dist", meaning the covariates are generated from pre-specified distributions. The prognistic formula and predictive formula are specified in parameter "prog" and "pred" respectively. As we are looking for a continuous response (type = "continuous"), we need to specify the sigma error. "include_truth"(0/1) determines whether we want to include the true patient treatment effect in the data or not. 
+
+## Generating data using power and standard deviation of treatment effect
+
+As is discussed in [data generation framework](http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/data_gen_methods.html), if power and standard deviation of treatment effect is given, they will affect $\beta_0$ and $\beta_1$. Another way of generating the data is to pre-specify the power and treatment effect, calculate $\beta_0$ and $\beta_1$ accordingly, then generate the data from there. This way of generating data aligns with the setting up of clinical trials. 
+
+```{r}
+## get the estimation of b0 and b1 in the given setting
+library(ggplot2)
+set.seed(2020)
+b0_result <- get_b0(n = 500, targ_power = c(0.05, 0.5, 0.9), data_type = "dist",
+       prog = "0.5*((X1=='Y')+X3)", pred = "X3>0",
+       b0_range = seq(0.00,1.0,length.out = 30), sd_te = 0.1,
+       type ="binary", N = 5000, prop = 0,
+       print_plot = TRUE)
+
+### extract b0 and b1 from the power calculation for power = 0.8
+b0 <- b0_result$b0 %>% filter(power == 0.9) %>% dplyr::select(b0) %>% as.numeric()
+b1 <- b0_result$param$b1
+
+### generate data accordingly
+dat <- generate_data(n = 500, p = 30, data_type = "dist",
+                   prop = 0, prog = "0.5*((X1=='Y')+X3)", pred = "X3>0",
+                   b0 = b0, b1 = b1, type = "binary")
+
+```
+The resuling plot gives out the observed powers(black dots) and predicted power curve (blue curve) along with the horizontal lines for target powers. If the target power can not be achieved by the current setting, a error massage will be given and the power plot will still be presented. Choose "print_plot = FALSE" to disable the plot.
+
+
+## Generating data from saved cases
+Since our data simulation setting considered the data cases with different power and standard deviation of treatment effect. To save computation time from calculating $\beta_0$ and $\beta_1$, we provided some data cases based on given parameters, See [data generation framework](http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/data_gen_methods.html) for the parameters considered. For the current exploration, the cases considered are:
+
+#### Cases for data generated from data_type "dist"
+1. $f(X) =  X_3-X_4 + trt*(\beta_0 + \beta_1*(X_4>0)|(X_1='Y'))$
+2. $f(X) = (X_1='Y')-0.5*X_2 + trt*(\beta_0 + \beta_1*(X7>0)*(X1=='Y'))$
+3. $f(X) = X_3-(X_5='Y') + trt*(\beta_0 + \beta_1*X_3)$
+4. $f(X) = 0.5*(X_1='Y')+X_3 + trt*(\beta_0 + \beta_1*(X3>0))$
+5. $f(X) = X_3+(X_6='M2') + trt*(\beta_0 + \beta_1*(X_6 ='M2'|X_6 = 'M4')))$
+
+#### Cases for data generated from data_type "syn"
+1. $f(X) =  0.5*(X_1='Y')+X_{11} + trt*(\beta_0 + \beta_1*(X_{11}>0.5))$
+2. $f(X) = X_{14}-(X_5='b') + trt*(\beta_0 + \beta_1*(X_{14}>0.25))$
+3. $f(X) = (X_1='N')-0.5*X_{17} + trt*(\beta_0 + \beta_1*(X_{14}>0.25)*(X_1='N'))$
+4. $f(X) = X_{11}-X_{14} + trt*(\beta_0 + \beta_1*(X_{14}>0.3)|(X_4='Y'))$
+5. $f(X) = X_{11}+(X_3='b') + trt*(\beta_0 + \beta_1*(X_3='b'|X_3='a'))$
+
+
+The above 5 cases are repeated in different combination of other parameters where
+
+- sd_te = c(0, 0.2, 0.5, 0.7, 1, 2)
+- n = c(100, 500, 1000)
+- type = c("continuous", "binary", "count", "survival")
+- power = c(0.05, 0.50, 0.90)
+
+In terms of choice of the number of covariates $p$, for data_type = "dist", user can specify the $p >= 10$; for data_type = "syn", $p = 30$.  
+
+The cases are saved in cases_param which can be directly loaded from the package. A snip of the cases_param are presented in the table below. 
+
+```{r}
+### load cases from data "dist"
+library(knitr)
+library(kableExtra)
+
+data(cases_param)
+cases_param %>% mutate(b1 = round(b1, 2), b0 = round(b0, 2)) %>%
+  group_by(data_type, type) %>% slice(1) %>%
+  kable() %>%
+  kable_styling(font_size = 12) %>%
+  scroll_box(width = "100%", height = "250px")
+
+dim(cases_param)
+case1 <- cases_param[1,]
+case1
+```
+
+Note that our saved cases are generated from data with p = 30, the p value can be any number > 30 for data_type = "dist" and 30 for data_type = "syn" (data "data_syn" only have 30 predictors). See more details on different predictors in data in [covariates structure](http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/covariates_structure.html).
+
+To make it easy to use, especially in the data simulation, a dataset can be directly from the saved case. User can directly use the seed/case to generate data. Each seed is corresponding to a row number in cases_dist and each case is corresponding to a row in cases_dist.
+```{r}
+## generate data based on the case from the first column of cases_dist
+dat1 <- generate_case_data(seed = 1, p = 100)
+
+## generate data baseed on the cases from cases_dist[3,]
+dat2 <- generate_case_data(case = cases_param[3,], p = 1000, include_truth = F)
+```
+-->

@@ -1,0 +1,8 @@
+pandoc: 2.1.3
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  a01_User_guidance: a01_User_guidance.html
+  a02_Examples_Real_Data: a02_Examples_Real_Data.html
+  a03_Examples_Simulation: a03_Examples_Simulation.html
+

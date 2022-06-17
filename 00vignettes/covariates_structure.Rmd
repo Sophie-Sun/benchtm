@@ -1,0 +1,146 @@
+<!--
+---
+title: "Covariates Structure"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Covariates Structure}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, warning=FALSE, message=FALSE, echo=FALSE}
+# library(benchtm)
+library(tidyverse)
+```
+
+The predictors/covariates considered in the package is from two set of dataset. One of them is to randomly generate variables from different distributions; the other one is to use the synthetic data generated from one of the trial studies.
+
+## Data generated pre-specfied distributions (data_type = "dist")
+
+One of the data setting is to generate predictors $X_1, X_2, ..., X_p$ from different distributions. In this setting, we considered random variable generated from 
+
+- continutous random variable: normal, exponential
+- categorical random variable: bernoulli, multinomial
+
+In addition, the dependence between different variables are added into the structure. See more details in the table below.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+tb1 <- data.frame(Distribution = c("Bernoulli","Exponential","Multivariate Normal",
+                            "Derived Bernoulli", "Multinomial",
+                            "Univariate Normal"),
+                 Variable = c("$X_1$","$X_2$",
+                              "$X_3,X_4,X_5^*$",
+                              "$X_5$","$X_6$",
+                              "$X_7, ... , X_p$"),
+                 Parameter = c("$P(X_1 = Y) = P(X_1 = N) = 0.5$",
+                               "$\\lambda = 1$",
+                               "$\\mu = (0, 0, 0)$, $\\rho = 0.5$",
+                               "$X_5 = Y$ if $X_5^* > 0$; N otherwise",
+                      "$P(X_6 = M1) = P(X_6 = M2)=P(X_6 = M3)=P(X_6 = M4)=0.25$", 
+                               "$\\mu = 0$, $\\sigma = 1$")) 
+knitr::kable(tb1, escape = FALSE)
+```
+
+In this table, for the multivariate normal, $\rho$ is the pairwise correlation between each two variables for $X_3, X_4, X_5^*$. $X_5^*$ is an intermidiet variable only used to generate $X_5$, which, though it is a binary variable, is somehow related with both $X_3$ and $X_4$. 
+
+## Synthetic data generated from clinical trials (data_type = "syn")
+
+Other than generating data from the pre-specified distribution, another option of generating synthetic data from a clnical trial is also provided. Use "data(data_syn)" to check out the covariates of the data. "data_syn" is a synthetic data generated from a clinical trial conducted by Novartis. For security reason, the variable name is transformed into $X_1, X_2, ... X_{30}$. See more details on the data description on [data "syn"](http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/syn_data_comp.html). The type of the variables and the corresponding values are presented in a table.
+
+
+To help better define the prognostic and predictive variables and formulas, the marginal distribution and the scatterplot and correlation between some of the continuous variables are provided in the below figure.
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.show="hold", out.width="100%"}
+dat_syn <- as.data.frame(readRDS("/home/sunhud/Projects/benchtm/source_data/data_syn.rds"))
+# data("data_syn")
+### function for density plot
+library(ggplot2)
+plot_density <- function(x.var, data){
+  data %>% dplyr::select(x.var = x.var) %>%
+    ggplot(aes(x = x.var)) + 
+    geom_density(alpha = 0.25, color = "blue") + geom_rug() +
+    theme_bw() + ylab("")+ 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1),
+                 legend.position = "none") + 
+    ggtitle(x.var) + xlab("")
+}
+######### univariate bar plot
+plot_bar <- function(x.var, data){
+  ## x.var categorical, y.car: binary, bar plot based on y.var
+   data %>% dplyr::select(x.var = x.var) %>%
+    ggplot(aes(x.var)) +
+   geom_bar(aes(y = (..count..)/sum(..count..)), fill = "blue", alpha = 0.5) +
+    theme_bw() + theme(axis.text.x = element_text(angle = 30, hjust = 1),
+                 legend.position = "none") +
+    ylab("Percentage") + xlab("") +
+    ggtitle(x.var)
+}
+
+pp_plots <- lapply(1:ncol(dat_syn), function(ii){
+  if(length(unique(dat_syn[[ii]])) > 5){
+    plot_density(colnames(dat_syn)[ii], dat_syn)
+  }else{
+    plot_bar(colnames(dat_syn)[ii], dat_syn)
+  }
+})
+
+res <- gridExtra::marrangeGrob(pp_plots, nrow = 2, ncol = 4, layout_matrix = matrix(1:8, nrow = 2, byrow = T))
+# par(mar = c(4, 4, .1, .1))
+plot(res[[1]])
+plot(res[[2]])
+plot(res[[3]])
+plot(res[[4]])
+```
+
+To help define the prognostic and predictive variable, the correlation between continuous covariates $X_{11}$ - $X_{30}$ is also given in the plot below.
+```{r, echo=FALSE, message=FALSE, fig.cap="Correlation for continuous variables for data 'syn'"}
+### continous correlation
+library(PerformanceAnalytics)
+chart.Correlation(as.matrix(dat_syn %>% dplyr::select(X11:X30)), histogram=TRUE, pch=19)
+```
+
+The pairwise correlation can be viewed from the correlation plot. For example, we can see from the correlation plot that the correlation between $X_{17}$ and $X_{18}$ is 0.91. If we include $X_{17}$ as in the predictive variables, it is vey likely that $X_{18}$ will also be chosen as a predictive variable due to the highly correlation between these two variables. The correlation plot can later on be used to better understand and interpret the result.
+
+
+## Data generated pre-specfied distributions (data_type = "user")
+The package provides the option for user specified covariate $X$
+
+```{r, warning = FALSE, message = FALSE}
+## generate data from user specified data
+library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+X <- sapply(1:10, function(ii) {rnorm(500)})
+X <- as.data.frame(X)
+colnames(X) <- paste0("Z", 1:10)  
+dat <- generate_data(n = 100, p = 30, data_type = "user", X = X,
+                     prop = "Z4", prog = "0.5*(Z7+Z3)", pred = "Z2>0",
+                     b0 = 0, sd_te = 0.5,
+                     type = "count")
+str(dat)
+```
+
+Use can use the pre-specified X as design matrix and design/calculate $beta_0$ and $\beta_1$ based on pre-specified overall treatment power (targ_power) and standard deviation of treatment effect (sd_te). An example is given below:
+```{r, warning = FALSE, message = FALSE}
+## generate data from user specified data X
+X <- sapply(1:10, function(ii) {rnorm(500)})
+X <- as.data.frame(X)
+colnames(X) <- paste0("Z", 1:10)
+b0_result <- get_b0(n = 500, targ_power = c(0.5, 0.8), data_type = "user", X = X,
+       prog = "0.5*Z1", pred = "Z2>0",
+       b0_range = seq(0.00,1.0,length.out = 30), sd_te = 0.2,
+       type ="binary", N = 5000, prop = "0.5*Z2",
+       print_plot = TRUE)
+## get b0 and b1
+b0 <- b0_result$b0 %>% filter(power == 0.8) %>% dplyr::select(b0) %>% as.numeric()
+b1 <- b0_result$param$b1
+
+b0
+b1
+```
+-->

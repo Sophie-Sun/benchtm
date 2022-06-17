@@ -1,0 +1,109 @@
+<!--
+---
+title: "How to contribute to the subgroup initiative"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contribute}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This article is used to demonstrate how to contribute to the implementation of the subgroup methodologies.
+
+## Introduction of Functions
+
+In subgroup [gitlab repository](https://gitlabce.statwb.eu.novartis.net/SUNHUD/Subgroup_Identification), there are source code in folder src. 
+
+```{r setup, echo = T, results = 'hide', warning = FALSE, message = FALSE}
+library(partykit, warn.conflicts = F, quietly = T)
+library(tidyverse, warn.conflicts = F, quietly = T)
+
+### change this folder into your local directory of Subgroup_identification
+folderpath <- "~/Projects/Subgroup_Identification"
+
+# source("../src/01_datagenerate.R")
+source(file.path(folderpath, "src/02_model_mobc_cont.R"))
+source(file.path(folderpath, "src/02_model_combine.R"))
+source(file.path(folderpath, "src/03_sub_metric.R"))
+```
+
+R code "02_model_mobc_cont.R" has a function "mobc_cont" is a customer written function to implement model based recursive partition (MOB) for subgroup identification, "cont" is used for continuous endpoints. This is the part of code we contribute on. If we take a look at the function "mobc_cont":
+
+```{r}
+mobc_cont
+```
+
+we could see that the function have input X, Y, trt, ... and output as a list of
+
+- sub_discover: TRUE/FALSE of finding subgroups
+- top_10vars: top 10 variables chosen in the order from most important to least important
+- est_trt_effect: estimated treatment effect for the model (yet to be determined for count and survival endpoints)
+- sub_index: A vector with value 0/1 indicating whether a subject is in defined subgroup or not
+- fit: model fit
+
+See more details in "02_model_mobc_cont.R". Code "02_model_combine.R" is a wrapper function for subgroup method implemetation. Code "03_sub_metric.R" calculate the performance metrics with input 
+
+- sub_fit: the fit from corresponding subgroup method
+- prog_vars: A character vector with true prognostic variables
+- pred_vars: A character vector with true predictive variables, NULL if b1 = 0
+- true_trt_effect: A numeric vector vector with true treatment effect(resp|treatment resp|control)
+
+and output:
+
+- sub_discover - Boolen value, is treatment effect heterogeneity detected?
+- pred_top1 - whether the most important variable is a predictive variable
+- pred_top - A vector with the same length as pred_vars, each item is 0/1 indicating whether 
+- the corresponding predictive vriable is in \code{top_vars}
+- prog_nopred_top - A vector with the same length as prognostic variables that are not predictive
+- each item is 0/1 indicating whether it is in is in \code{top_vars}
+- rmse - mean square difference of \code{true_trt_effect} and \code{est_trt_effect} for top 50%, top 20%, of the estimated treatment effect
+- sub_size - subgroup size
+- sub_rmse - \code{rmse} calculated in subgroup
+
+See details in R code "../src/03_sub_metric.R".
+
+
+## An demonstration example
+
+we can start with a subgroup implemetation and save it as "02_model_{method}_{response type}.R", for example "02_model_mobc_cont.R" or "02_model_mobc_bin.R". Then we can use "02_model_combine.R" and "03_sub_metric.R" to get the performance metrics from the method.
+
+```{r}
+#### choose the parameter scenarios, y = prog + trt * (b0 + b1 * pred)
+library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+set.seed(2020)
+dat <- generate_data(n = 500, p = 30, data_type = "dist",
+                   prop = 0, prog = "0.5*((X1=='Y')+X3)", pred = "X3>0",
+                   b0 = 0, b1 = 2, type = "continuous", 
+                   include_truth = 1, sigma_error = 1)
+
+### get X, Y and trt from the data
+X <- dat %>% dplyr::select(X1:X30)
+Y <- dat$Y
+trt <- dat$trt
+
+################ modeling part
+### calculate result from model mobc
+### fit_sub is from 02_model_combine.R
+mod_result <- fit_sub(X, Y, trt, FUN = mobc_cont, maxdept = 4, alpha = 0.1)
+## output result
+# summary(mod_result)
+# plot(mod_result$fit)
+
+### get performance metric for each trial
+sub_metric(mod_result,
+           prog_vars = attr(dat, "prog"), 
+           pred_vars = attr(dat, "pred"), 
+           true_trt_effect = dat$trt_effect)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+-->

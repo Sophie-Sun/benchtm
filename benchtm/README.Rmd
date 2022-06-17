@@ -1,0 +1,61 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# benchtm
+## Project Description: 
+
+<table>
+<colgroup>
+<col width="79%" />
+<col width="20%" />
+</colgroup>
+<tr>
+<td align = "left">
+<h3> The <code>{benchtm}</code> aims to generate simulated data sets of heterogeneous treatment effects in clinical trials for benchmarking quantitaive methods. </h3>
+</td>
+<td align="center">
+<img src='man/figures/logo.png' align="right" />
+</td>
+</tr>
+</table>
+<hr />
+
+
+
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+
+## Installation
+
+You can directly use the current version of `{benchtm}` with:
+
+``` {r, eval = FALSE}
+library(benchtm, lib.loc = "/home/sunhud/R/x86_64-pc-linux-gnu-library/3.6")
+```
+
+## Developers 
+- [Sophie Sun](mailto:sophie.sun@novartis.com)
+- [Ardalan Mirshani](mailto:ardalan.mirshani@novartis.com)
+- [Bjoern Bornkamp](mailto:bjoern.bornkamp@novartis.com)
+- [Jiarui Lu](mailto:jiarui.lu@novartis.com)
+- [Kostas Sechidis](mailto:kostas.sechidis@novartis.com)
+- [Yao Chen](mailto:yao.chen@novartis.com)
+
+
+
+
+

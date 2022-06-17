@@ -1,0 +1,14 @@
+destination: docs
+
+home:
+  links:
+  - text: Submit issues
+    href: https://gitlabce.statwb.eu.novartis.net/MIRSHAR1/benchtm/issues
+
+  - text: Subgroup bookdown "go/subgroup" or click
+    href: http://shinyserver-r361.statwb.eu.novartis.net/mirshar1/subgroup/book/live_book/
+
+  - text: Subgroup Yammer Page
+    href: https://web.yammer.com/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIxNTMzNjY5Mzc2MCJ9/all
+
+
