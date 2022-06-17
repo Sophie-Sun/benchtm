@@ -1,0 +1,14 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: benchtm
+message: please cite this benchtm package when use it
+type: software
+authors:
+  - given-names: Sophie
+    email: sophie.sun@novartis.com
+    affiliation: Novartis Corporation
+    family-names: Sun
+  - given-names: Bjoern
+    family-names: Bornkamp
