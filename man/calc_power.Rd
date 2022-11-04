@@ -4,8 +4,17 @@
 \alias{calc_power}
 \title{Power calculation to detect overall treatment effect and interaction effect}
 \usage{
-calc_power(b, scal, prog_vals, trt, pred_vals, alpha, type, sign_better,
-  sigma_error)
+calc_power(
+  b,
+  scal,
+  prog_vals,
+  trt,
+  pred_vals,
+  alpha,
+  type,
+  sign_better,
+  sigma_error
+)
 }
 \arguments{
 \item{b}{Vector of length 2: Coefficient for treatment indicator

@@ -5,9 +5,20 @@
 \title{Calculate b parameter to achieve a given power to detect an overall
 effect and the interaction effect}
 \usage{
-get_b(X, scal, prog, pred, trt, type, power = c(0.9, 0.8),
-  alpha = c(0.025, 0.1), start = c(0, 0), sign_better = 1,
-  sigma_error, optim_method = "Nelder-Mead")
+get_b(
+  X,
+  scal,
+  prog,
+  pred,
+  trt,
+  type,
+  power = c(0.9, 0.8),
+  alpha = c(0.025, 0.1),
+  start = c(0, 0),
+  sign_better = 1,
+  sigma_error,
+  optim_method = "Nelder-Mead"
+)
 }
 \arguments{
 \item{X}{Matrix with all covariates}

@@ -4,8 +4,13 @@
 \alias{generate_trt}
 \title{Generate binary treatment variable}
 \usage{
-generate_trt(n, p_trt = 0.5, type = c("exact", "random"), X = NULL,
-  prop = NULL)
+generate_trt(
+  n,
+  p_trt = 0.5,
+  type = c("exact", "random"),
+  X = NULL,
+  prop = NULL
+)
 }
 \arguments{
 \item{n}{Total sample size}

@@ -30,7 +30,7 @@ survival data the log-hazard rate."><meta property="og:image" content="/logo.png
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -71,10 +71,21 @@ survival data the log-hazard rate.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, <span class="va">prog</span>, <span class="va">pred</span>, <span class="va">b0</span>, b1 <span class="op">=</span> <span class="cn">NULL</span>, sd_te <span class="op">=</span> <span class="cn">NULL</span>,
-  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"binary"</span>, <span class="st">"continuous"</span>, <span class="st">"count"</span>, <span class="st">"survival"</span><span class="op">)</span>,
-  sigma_error <span class="op">=</span> <span class="fl">1</span>, theta <span class="op">=</span> <span class="fl">1</span>, cens_time <span class="op">=</span> <span class="fl">2</span>, include_truth <span class="op">=</span> <span class="cn">FALSE</span>,
-  sign_better <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_y</span><span class="op">(</span></span>
+<span>  <span class="va">X</span>,</span>
+<span>  <span class="va">trt</span>,</span>
+<span>  <span class="va">prog</span>,</span>
+<span>  <span class="va">pred</span>,</span>
+<span>  <span class="va">b0</span>,</span>
+<span>  b1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sd_te <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"binary"</span>, <span class="st">"continuous"</span>, <span class="st">"count"</span>, <span class="st">"survival"</span><span class="op">)</span>,</span>
+<span>  sigma_error <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  theta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cens_time <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  include_truth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  sign_better <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -124,39 +135,39 @@ whether b1 is negative or positive if not given)</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10000</span>, p<span class="op">=</span><span class="fl">10</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## observational data set</span></span>
-<span class="r-in"><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"random"</span>, X<span class="op">=</span><span class="va">X</span>, prop<span class="op">=</span> <span class="st">"X2"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,</span>
-<span class="r-in">                  pred <span class="op">=</span> <span class="st">"X3&gt;0"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">                  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#### generate data from user specified covariate X</span></span>
-<span class="r-in"><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="kw">function</span><span class="op">(</span><span class="va">ii</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Z"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*Z1"</span>,</span>
-<span class="r-in">                  pred <span class="op">=</span> <span class="st">"(Z5&gt;0)"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">                  type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">trt</span><span class="op">*</span><span class="va">.</span>, data<span class="op">=</span><span class="va">dat</span>, family<span class="op">=</span><span class="va">binomial</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10000</span>, p<span class="op">=</span><span class="fl">10</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## observational data set</span></span></span>
+<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"random"</span>, X<span class="op">=</span><span class="va">X</span>, prop<span class="op">=</span> <span class="st">"X2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,</span></span>
+<span class="r-in"><span>                  pred <span class="op">=</span> <span class="st">"X3&gt;0"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#### generate data from user specified covariate X</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="kw">function</span><span class="op">(</span><span class="va">ii</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Z"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*Z1"</span>,</span></span>
+<span class="r-in"><span>                  pred <span class="op">=</span> <span class="st">"(Z5&gt;0)"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                  type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">trt</span><span class="op">*</span><span class="va">.</span>, data<span class="op">=</span><span class="va">dat</span>, family<span class="op">=</span><span class="va">binomial</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:  glm(formula = Y ~ trt * ., family = binomial, data = dat)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)          trt           Z1           Z2           Z3           Z4  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.26605      0.89574      0.65326      0.01024      0.01908     -0.09959  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.111541     0.405792     0.487281    -0.009735     0.062155     0.139002  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Z5           Z6           Z7           Z8           Z9          Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.05715     -0.00706     -0.28320     -0.01297     -0.10762      0.04667  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.118047     0.018107    -0.053290     0.133213     0.011281     0.160037  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z1       trt:Z2       trt:Z3       trt:Z4       trt:Z5       trt:Z6  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.08439      0.01239      0.09394      0.34716      0.32143     -0.15568  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.064111     0.053388    -0.118392    -0.079888     0.482704    -0.131833  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z7       trt:Z8       trt:Z9      trt:Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.28876      0.12379      0.21005      0.15311  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.177331    -0.277263     0.151921    -0.325551  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom: 499 Total (i.e. Null);  478 Residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    688.5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 611 	AIC: 655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    685.9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 637.2 	AIC: 681.2</span>
 </code></pre></div>
     </div>
   </div>
@@ -167,7 +178,7 @@ whether b1 is negative or positive if not given)</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen.</p>
 </div>
 
 <div class="pkgdown">
