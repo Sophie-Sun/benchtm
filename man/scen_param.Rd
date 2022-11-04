@@ -4,10 +4,9 @@
 \name{scen_param}
 \alias{scen_param}
 \title{Pre-specified simulation scenarios from XYZ}
-\format{See more details on the choice of parameters considered in
-\url{http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/data_gen_methods.html}}
-\source{
-See more details on the the data cases in \url{http://shinyserver-r361.statwb.eu.novartis.net/sunhud/benchtm/docs/articles/Examples.html}
+\format{
+See more details on the choice of parameters considered in
+\url{https://htmlpreview.github.io/?https://raw.githubusercontent.com/Sophie-Sun/benchtm/master/docs/articles/a01_User_guidance.html}
 }
 \usage{
 scen_param

@@ -5,8 +5,20 @@
 \title{Calculate b0 parameter to achieve a given power to detect an overall
 effect and the interaction effect}
 \usage{
-get_b0(X, scal, prog, pred, trt, b1, type, power = 0.9, alpha = 0.025,
-  sign_better = 1, sigma_error, interval = c(-5, 5))
+get_b0(
+  X,
+  scal,
+  prog,
+  pred,
+  trt,
+  b1,
+  type,
+  power = 0.9,
+  alpha = 0.025,
+  sign_better = 1,
+  sigma_error,
+  interval = c(-5, 5)
+)
 }
 \arguments{
 \item{X}{Matrix with all covariates}

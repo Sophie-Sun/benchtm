@@ -8,26 +8,15 @@ type: software
 authors:
   - given-names: Sophie
     email: sophie.sun@novartis.com
-    affiliation: Novartis Corporation
     family-names: Sun
   - given-names: Bjoern
-    email: bjoern.bornkamp@novartis.com
-    affiliation: Novartis Corporation
     family-names: Bornkamp
   - given-names: Kostas
-    email: kostas.sechidis@novartis.com
-    affiliation: Novartis Corporation
     family-names: Sechidis
   - given-names: Ardalan
-    email: ardalan.mirshani@novartis.com
-    affiliation: Novartis Corporation
     family-names: Mirshani
   - given-names: Jiarui
-    email: jiarui.lu@novartis.com
-    affiliation: Novartis Corporation
     family-names: Lu
   - given-names: Yao
-    email: yao.chen@novartis.com
-    affiliation: Novartis Corporation
     family-names: Chen
-    
+
