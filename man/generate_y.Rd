@@ -4,10 +4,21 @@
 \alias{generate_y}
 \title{Generate outcome variable y and merge with predictor data matrix X.}
 \usage{
-generate_y(X, trt, prog, pred, b0, b1 = NULL, sd_te = NULL,
+generate_y(
+  X,
+  trt,
+  prog,
+  pred,
+  b0,
+  b1 = NULL,
+  sd_te = NULL,
   type = c("binary", "continuous", "count", "survival"),
-  sigma_error = 1, theta = 1, cens_time = 2, include_truth = FALSE,
-  sign_better = 1)
+  sigma_error = 1,
+  theta = 1,
+  cens_time = 2,
+  include_truth = FALSE,
+  sign_better = 1
+)
 }
 \arguments{
 \item{X}{matrix/dataframe of predictor variables}

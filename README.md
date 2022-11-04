@@ -42,9 +42,5 @@ An .html vignette with introduction to package can be previewed
 
 ## Contact us
 
--   [Sophie Sun](mailto:sophie.sun@novartis.com)
--   [Ardalan Mirshani](mailto:ardalan.mirshani@novartis.com)
--   [Bjoern Bornkamp](mailto:bjoern.bornkamp@novartis.com)
--   [Jiarui Lu](mailto:jiarui.lu@novartis.com)
--   [Kostas Sechidis](mailto:kostas.sechidis@novartis.com)
--   [Yao Chen](mailto:yao.chen@novartis.com)
+-   For any questions, please contact: [Sophie
+    Sun](mailto:sophie.sun@novartis.com)

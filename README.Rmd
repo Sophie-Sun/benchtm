@@ -51,12 +51,8 @@ devtools::install_github("Sophie-Sun/benchtm")
 An .html vignette with introduction to package can be previewed [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/Sophie-Sun/benchtm/master/docs/articles/index.html).
 
 ## Contact us
-- [Sophie Sun](mailto:sophie.sun@novartis.com)
-- [Ardalan Mirshani](mailto:ardalan.mirshani@novartis.com)
-- [Bjoern Bornkamp](mailto:bjoern.bornkamp@novartis.com)
-- [Jiarui Lu](mailto:jiarui.lu@novartis.com)
-- [Kostas Sechidis](mailto:kostas.sechidis@novartis.com)
-- [Yao Chen](mailto:yao.chen@novartis.com)
+- For any questions, please contact: [Sophie Sun](mailto:sophie.sun@novartis.com)
+
 
 
 
