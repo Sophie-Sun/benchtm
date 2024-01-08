@@ -7,7 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -22,7 +21,7 @@ R package "benchtm" can be used to generate data for the comparison of subgroup 
 
 ```{r}
 library(benchtm)
-library(tidyverse)
+library(dplyr)
 ```
 
 

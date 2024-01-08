@@ -1,0 +1,25 @@
+#' Pre-specified simulation scenarios from XYZ
+#'
+#' The scenarios were derived so that the prognostic part of the model
+#' on the control arm has an R^2 of 0.32 for time-to-event data.
+#' The coefficient b0 was calculated in
+#' each case so that the overall test for a treatment effect has a
+#' power of 50% for 2.5% one-sided. There are four main scenarios
+#' (defined by the expressions for prognostic and predictive part)
+#' replicated across time to event endpoints. Within each
+#' scenario there are 5 sub-scenarios corresponding to different
+#' selections of b1. The third case in each of the sub-scenarios
+#' correspond to the case where the interaction test (under the true
+#' model) has 80% power (for 20% two-sided, or 10% one-sided as only
+#' b1 > 0 is considered). The other 4 cases correspond to 0, 0.5, 1.5,
+#' 2 times the b1 value that provides 80% power of the interaction
+#' test. The column b1_rel gives the size of b1 relative to the b1
+#' value that provides 80% power. In total there are 4x2x5=40
+#' scenarios.
+#'
+#' @format See more details on the choice of parameters considered in
+#' \url{https://pubmed.ncbi.nlm.nih.gov/36437036/}
+#'
+#' @source See more details on the the data cases in \url{https://pubmed.ncbi.nlm.nih.gov/36437036/}
+#'
+"scen_param_TTE"

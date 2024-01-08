@@ -13,13 +13,15 @@ calc_power(
   alpha,
   type,
   sign_better,
-  sigma_error
+  sigma_error,
+  lambda0,
+  cens_time,
+  t_mile
 )
 }
 \arguments{
 \item{b}{Vector of length 2: Coefficient for treatment indicator
 and predictive term in the true model}
-
 
 \item{scal}{Scaling parameter for the covariance matrix}
 
@@ -45,6 +47,13 @@ response is better (used in power calculation for the overall
 test only)}
 
 \item{sigma_error}{Residual variance assumed for type = "continuous"}
+
+\item{lambda0}{Intercept of exponential regression (on non-log scale)}
+
+\item{cens_time}{function that generates random censoring times}
+
+\item{t_mile}{time-point for comparing the survival probabilities
+for test of overall treatment effect}
 }
 \value{
 Vector of two power values
@@ -70,19 +79,27 @@ in one can then scale up the covariance matrix estimate (e.g. by
 \examples{
 ###### generate a matrix of covariates
 scal <- 100
-X <- generate_X_dist(n=500*scal, p=30, rho=0.5)
-trt <- generate_trt(n=500*scal, p_trt = 0.5)
+X <- generate_X_dist(n = 500 * scal, p = 30, rho = 0.5)
+trt <- generate_trt(n = 500 * scal, p_trt = 0.5)
 prog <- "0.5*((X1=='Y')+X11)"
 pred <- "X11>0.5"
 pred_vals <- with(X, eval(parse(text = pred)))
 prog_vals <- with(X, eval(parse(text = prog)))
-alpha <- c(0.025,0.1)
-calc_power(b=c(0,0), scal, prog_vals, trt, pred_vals, alpha,
-           type="continuous", sigma_error=1, sign_better=1)
-calc_power(b=c(0.2,0.3), scal, prog_vals, trt, pred_vals, alpha,
-           type="continuous", sigma_error=1, sign_better=1)
-calc_power(b=c(0,0), scal, prog_vals, trt, pred_vals, alpha,
-           type="binary", sign_better=1)
-calc_power(b=c(0.5,0.8), scal, prog_vals, trt, pred_vals, alpha,
-           type="binary", sign_better=1)
+alpha <- c(0.025, 0.1)
+calc_power(
+  b = c(0, 0), scal, prog_vals, trt, pred_vals, alpha,
+  type = "continuous", sigma_error = 1, sign_better = 1
+)
+calc_power(
+  b = c(0.2, 0.3), scal, prog_vals, trt, pred_vals, alpha,
+  type = "continuous", sigma_error = 1, sign_better = 1
+)
+calc_power(
+  b = c(0, 0), scal, prog_vals, trt, pred_vals, alpha,
+  type = "binary", sign_better = 1
+)
+calc_power(
+  b = c(0.5, 0.8), scal, prog_vals, trt, pred_vals, alpha,
+  type = "binary", sign_better = 1
+)
 }

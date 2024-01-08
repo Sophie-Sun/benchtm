@@ -1,15 +1,5 @@
 benchtm
-tidyverse
-ggplot2
-tibble
-tidyr
-readr
-purrr
 dplyr
-stringr
-forcats
-clustMD
 survival
 haven
-ggpubr
-survminer
+ggplot2

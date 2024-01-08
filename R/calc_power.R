@@ -36,57 +36,107 @@
 #'   response is better (used in power calculation for the overall
 #'   test only)
 #' @param sigma_error Residual variance assumed for type = "continuous"
+#' @param lambda0 Intercept of exponential regression (on non-log scale)
+#' @param cens_time function that generates random censoring times
+#' @param t_mile time-point for comparing the survival probabilities
+#'   for test of overall treatment effect
 #' @return Vector of two power values
+#' @import matrixStats
 #' @export
 #' @examples
 #' ###### generate a matrix of covariates
 #' scal <- 100
-#' X <- generate_X_dist(n=500*scal, p=30, rho=0.5)
-#' trt <- generate_trt(n=500*scal, p_trt = 0.5)
+#' X <- generate_X_dist(n = 500 * scal, p = 30, rho = 0.5)
+#' trt <- generate_trt(n = 500 * scal, p_trt = 0.5)
 #' prog <- "0.5*((X1=='Y')+X11)"
 #' pred <- "X11>0.5"
 #' pred_vals <- with(X, eval(parse(text = pred)))
 #' prog_vals <- with(X, eval(parse(text = prog)))
-#' alpha <- c(0.025,0.1)
-#' calc_power(b=c(0,0), scal, prog_vals, trt, pred_vals, alpha,
-#'            type="continuous", sigma_error=1, sign_better=1)
-#' calc_power(b=c(0.2,0.3), scal, prog_vals, trt, pred_vals, alpha,
-#'            type="continuous", sigma_error=1, sign_better=1)
-#' calc_power(b=c(0,0), scal, prog_vals, trt, pred_vals, alpha,
-#'            type="binary", sign_better=1)
-#' calc_power(b=c(0.5,0.8), scal, prog_vals, trt, pred_vals, alpha,
-#'            type="binary", sign_better=1)
-calc_power <- function(b, scal, prog_vals, trt, pred_vals, alpha, type, sign_better, sigma_error){
+#' alpha <- c(0.025, 0.1)
+#' calc_power(
+#'   b = c(0, 0), scal, prog_vals, trt, pred_vals, alpha,
+#'   type = "continuous", sigma_error = 1, sign_better = 1
+#' )
+#' calc_power(
+#'   b = c(0.2, 0.3), scal, prog_vals, trt, pred_vals, alpha,
+#'   type = "continuous", sigma_error = 1, sign_better = 1
+#' )
+#' calc_power(
+#'   b = c(0, 0), scal, prog_vals, trt, pred_vals, alpha,
+#'   type = "binary", sign_better = 1
+#' )
+#' calc_power(
+#'   b = c(0.5, 0.8), scal, prog_vals, trt, pred_vals, alpha,
+#'   type = "binary", sign_better = 1
+#' )
+calc_power <- function(b, scal, prog_vals, trt, pred_vals, alpha, type, sign_better,
+                       sigma_error, lambda0, cens_time, t_mile) {
   ## build design matrix
-  X <- cbind(1, prog_vals, trt, trt*pred_vals)
-  mu <- as.numeric(X%*%c(0,1,b)) # mean on linear predictor scale
-  n1 <- sum(trt==1)
-  n0 <- sum(trt==0)
+  X <- cbind(1, prog_vals, trt, trt * pred_vals)
+  mu <- as.numeric(X %*% c(0, 1, b)) # mean on linear predictor scale
+  n1 <- sum(trt == 1)
+  n0 <- sum(trt == 0)
   power <- numeric(2)
-  if(type == "continuous"){ # calculations specific for cont
-    delta_ov <- (b[1]+b[2]*mean(pred_vals))
-    s0_2 <- var(prog_vals)+sigma_error^2 # var control
-    s1_2 <- var(prog_vals+b[1]+b[2]*pred_vals)+sigma_error^2 # var trt
-    Vc <- sigma_error^2*solve(crossprod(X)/scal) # variance estimate for true model (see generate_y + intercept)
-    se_ov <- sqrt(s1_2/n1+s0_2/n0)*sqrt(scal)
+  if (type == "continuous") { # calculations specific for cont
+    delta_ov <- (b[1] + b[2] * mean(pred_vals))
+    s0_2 <- var(prog_vals) + sigma_error^2 # var control
+    s1_2 <- var(prog_vals + b[1] + b[2] * pred_vals) + sigma_error^2 # var trt
+    Vc <- sigma_error^2 * solve(crossprod(X) / scal) # variance estimate for true model (see generate_y + intercept)
+    se_ov <- sqrt(s1_2 / n1 + s0_2 / n0) * sqrt(scal)
   }
-  if(type == "binary"){ # specific for binary
-    p1 <- 1/(1+exp(-(prog_vals+b[1]+b[2]*pred_vals)))
+  if (type == "binary") { # specific for binary
+    p1 <- 1 / (1 + exp(-(prog_vals + b[1] + b[2] * pred_vals)))
     Ep1 <- mean(p1)
-    p0 <- 1/(1+exp(-prog_vals))
+    p0 <- 1 / (1 + exp(-prog_vals))
     Ep0 <- mean(p0)
     delta_ov <- (Ep1 - Ep0)
-    p <- 1/(1+exp(-mu))
-    Vc <- solve(crossprod(X*sqrt(p*(1-p)))/scal) #solve(t(X)%*%diag(p*(1-p))%*%X) # variance estimate for true model
-    v1 <- Ep1*(1-Ep1)/n1
-    v0 <- Ep0*(1-Ep0)/n0
-    se_ov <- sqrt(v1 + v0)*sqrt(scal)
+    p <- 1 / (1 + exp(-mu))
+    Vc <- solve(crossprod(X * sqrt(p * (1 - p))) / scal) # solve(t(X)%*%diag(p*(1-p))%*%X) # variance estimate for true model
+    v1 <- Ep1 * (1 - Ep1) / n1
+    v0 <- Ep0 * (1 - Ep0) / n0
+    se_ov <- sqrt(v1 + v0) * sqrt(scal)
+  }
+  if (type == "survival") {
+    ## unadjusted power based on survival difference at time=t_mile
+    ## population survival curve on control and trt
+    n <- length(prog_vals)
+    S0 <- mean(exp(-exp(log(lambda0) + prog_vals) * t_mile))
+    S1 <- mean(exp(-exp(log(lambda0) + prog_vals + b[1] + b[2] * pred_vals) * t_mile))
+    delta_ov <- log(S0) - log(S1)
+    ## approximate variance of Nelson-Aalen estimate at time t_mile (same as variance of log(S(t)))
+    func <- function(n, mn) {
+      tmp <- cbind(rexp(n, mn), cens_time(n))
+      t_obs <- matrixStats::rowMins(tmp)
+      event <- as.numeric(tmp[, 1] < tmp[, 2])
+      Y <- n:1
+      ord <- order(t_obs)
+      t_obs <- t_obs[ord]
+      event <- event[ord]
+      sum(1 / Y[event == 1 & t_obs < t_mile]^2) # variance for Nelson-Aalen
+    }
+    ## approximate variance separately on trt and control
+    mn <- exp(log(lambda0) + prog_vals)
+    rep_vr0 <- replicate(15, func(n, mn))
+    mn <- exp(log(lambda0) + prog_vals + b[1] + b[2] * pred_vals)
+    rep_vr1 <- replicate(15, func(n, mn))
+    se_ov <- mean(sqrt(rep_vr1 * n / n1 + rep_vr0 * n / n0)) # SE of difference
+    se_ov <- se_ov * sqrt(scal) # re-scale
+    ## approximate covariance matrix for exponential regression (interaction test)
+    mn <- exp(log(lambda0) + prog_vals + b[1] * trt + b[2] * pred_vals * trt)
+    ## approximate expectation by 15 random replications
+    rep_times <- replicate(20, {
+      tmp <- cbind(rexp(n, mn), cens_time(n))
+      matrixStats::rowMins(tmp)
+    })
+    times <- rowMeans(rep_times)
+    ee <- mn * times
+    Vc <- solve(crossprod(-sqrt(ee) * X) / scal)
   }
   ## power of gauss-test (assuming variances known)
-  delta_ov <- delta_ov*sign_better
-  power[1] <- 1-pnorm(qnorm(1-alpha[1]), delta_ov/se_ov, 1) 
+  delta_ov <- delta_ov * sign_better
+  power[1] <- 1 - pnorm(qnorm(1 - alpha[1]), delta_ov / se_ov, 1)
   ## power to detect interaction term (under true model)
-  se <- sqrt(Vc[4,4])
-  power[2] <- 1-(pnorm(qnorm(1-alpha[2]/2), b[2]/se, 1)-pnorm(qnorm(alpha[2]/2), b[2]/se, 1))
+  se <- sqrt(Vc[4, 4])
+  power[2] <- 1 - (pnorm(qnorm(1 - alpha[2] / 2), b[2] / se, 1) - pnorm(qnorm(alpha[2] / 2), b[2] / se, 1))
   power
 }

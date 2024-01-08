@@ -102,6 +102,9 @@ example above).</p>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  sign_better <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">sigma_error</span>,</span>
+<span>  <span class="va">lambda0</span>,</span>
+<span>  <span class="va">cens_time</span>,</span>
+<span>  <span class="va">t_mile</span>,</span>
 <span>  interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -141,6 +144,14 @@ response is better (used in power calculation for the overall
 test only)</p></dd>
 <dt>sigma_error</dt>
 <dd><p>Residual variance assumed for type = "continuous"</p></dd>
+<dt>lambda0</dt>
+<dd><p>Intercept of exponential regression (on non-log scale)</p></dd>
+<dt>cens_time</dt>
+<dd><p>Function to generate the censoring time, only
+needed for data_type = "survival"</p></dd>
+<dt>t_mile</dt>
+<dd><p>Time point for comparing survival probabilities for overall
+test for treatment effect</p></dd>
 <dt>interval</dt>
 <dd><p>Interval to search for b0 handed over to uniroot</p></dd>
 </dl></div>
@@ -153,20 +164,24 @@ test only)</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">scal</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">500</span><span class="op">*</span><span class="va">scal</span>, p<span class="op">=</span><span class="fl">30</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">500</span><span class="op">*</span><span class="va">scal</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500</span> <span class="op">*</span> <span class="va">scal</span>, p <span class="op">=</span> <span class="fl">30</span>, rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500</span> <span class="op">*</span> <span class="va">scal</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prog</span> <span class="op">&lt;-</span> <span class="st">"0.5*((X1=='Y')+X11)"</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="st">"X11&gt;0.5"</span></span></span>
-<span class="r-in"><span><span class="fu">get_b0</span><span class="op">(</span><span class="va">X</span>, <span class="va">scal</span>, <span class="va">prog</span>, <span class="va">pred</span>, <span class="va">trt</span>, b1 <span class="op">=</span> <span class="fl">0.5</span>, type<span class="op">=</span><span class="st">"continuous"</span>,</span></span>
-<span class="r-in"><span>       power <span class="op">=</span> <span class="fl">0.9</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, interval<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, sigma_error<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.194049</span>
+<span class="r-in"><span><span class="fu">get_b0</span><span class="op">(</span><span class="va">X</span>, <span class="va">scal</span>, <span class="va">prog</span>, <span class="va">pred</span>, <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>  b1 <span class="op">=</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"continuous"</span>,</span></span>
+<span class="r-in"><span>  power <span class="op">=</span> <span class="fl">0.9</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, sigma_error <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1930193</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"power_results")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9000028</span>
-<span class="r-in"><span><span class="fu">get_b0</span><span class="op">(</span><span class="va">X</span>, <span class="va">scal</span>, <span class="va">prog</span>, <span class="va">pred</span>, <span class="va">trt</span>, b1 <span class="op">=</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"binary"</span>,</span></span>
-<span class="r-in"><span>       power <span class="op">=</span> <span class="fl">0.9</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, interval<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5339464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9000049</span>
+<span class="r-in"><span><span class="fu">get_b0</span><span class="op">(</span><span class="va">X</span>, <span class="va">scal</span>, <span class="va">prog</span>, <span class="va">pred</span>, <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>  b1 <span class="op">=</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"binary"</span>,</span></span>
+<span class="r-in"><span>  power <span class="op">=</span> <span class="fl">0.9</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5323776</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"power_results")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.900024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9000233</span>
 </code></pre></div>
     </div>
   </div>
@@ -177,11 +192,13 @@ test only)</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
+Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

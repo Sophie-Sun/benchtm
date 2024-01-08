@@ -82,7 +82,8 @@ survival data the log-hazard rate.</p>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"binary"</span>, <span class="st">"continuous"</span>, <span class="st">"count"</span>, <span class="st">"survival"</span><span class="op">)</span>,</span>
 <span>  sigma_error <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  theta <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  cens_time <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  cens_time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambda0 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_truth <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sign_better <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -117,16 +118,19 @@ this is assumed to be on the log scale.</p></dd>
 "continuous"</p></dd>
 <dt>theta</dt>
 <dd><p>Overdispersion parameter, only needed for data_type =
-"count" (variance of neg bin in this parameterization is mu + mu^2/theta)</p></dd>
+"count" (variance of neg bin in this parameterization is mu +
+mu^2/theta)</p></dd>
 <dt>cens_time</dt>
-<dd><p>Maximum follow-up time, only needed for data_type
-= "survival"</p></dd>
+<dd><p>Function to generate the censoring time, only
+needed for data_type = "survival"</p></dd>
+<dt>lambda0</dt>
+<dd><p>Intercept of exponential regression (on non-log scale)</p></dd>
 <dt>include_truth</dt>
-<dd><p>boolean, will the true prognostic and predictive
-effects be included in the outcome data-set?</p></dd>
+<dd><p>boolean, will the true prognostic and
+predictive effects be included in the outcome data-set?</p></dd>
 <dt>sign_better</dt>
-<dd><p>whether larger response is better (used to determine
-whether b1 is negative or positive if not given)</p></dd>
+<dd><p>whether larger response is better (used to
+determine whether b1 is negative or positive if not given)</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -135,39 +139,45 @@ whether b1 is negative or positive if not given)</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10000</span>, p<span class="op">=</span><span class="fl">10</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10000</span>, p <span class="op">=</span> <span class="fl">10</span>, rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## observational data set</span></span></span>
-<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"random"</span>, X<span class="op">=</span><span class="va">X</span>, prop<span class="op">=</span> <span class="st">"X2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,</span></span>
-<span class="r-in"><span>                  pred <span class="op">=</span> <span class="st">"X3&gt;0"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>                  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"random"</span>, X <span class="op">=</span> <span class="va">X</span>, prop <span class="op">=</span> <span class="st">"X2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>  prog <span class="op">=</span> <span class="st">"0.5*((X1=='Y')+X3)"</span>,</span></span>
+<span class="r-in"><span>  pred <span class="op">=</span> <span class="st">"X3&gt;0"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#### generate data from user specified covariate X</span></span></span>
-<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="kw">function</span><span class="op">(</span><span class="va">ii</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="kw">function</span><span class="op">(</span><span class="va">ii</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Z"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>, prog <span class="op">=</span> <span class="st">"0.5*Z1"</span>,</span></span>
-<span class="r-in"><span>                  pred <span class="op">=</span> <span class="st">"(Z5&gt;0)"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>                  type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">trt</span><span class="op">*</span><span class="va">.</span>, data<span class="op">=</span><span class="va">dat</span>, family<span class="op">=</span><span class="va">binomial</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">generate_y</span><span class="op">(</span><span class="va">X</span>, <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>  prog <span class="op">=</span> <span class="st">"0.5*Z1"</span>,</span></span>
+<span class="r-in"><span>  pred <span class="op">=</span> <span class="st">"(Z5&gt;0)"</span>, b0 <span class="op">=</span> <span class="fl">0</span>, b1 <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"binary"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">*</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:  glm(formula = Y ~ trt * ., family = binomial, data = dat)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)          trt           Z1           Z2           Z3           Z4  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.24126      0.35499      0.47818      0.35728     -0.20670      0.09425  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.071091     0.680241     0.475418     0.166988     0.096594    -0.077793  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Z5           Z6           Z7           Z8           Z9          Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.10631      0.02932      0.02500     -0.06305     -0.17546      0.21140  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -0.296688     0.005302     0.077663    -0.148340     0.210014    -0.084458  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z1       trt:Z2       trt:Z3       trt:Z4       trt:Z5       trt:Z6  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.20005     -0.39478      0.48583     -0.06912      0.51026     -0.15885  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.096852    -0.166317    -0.031943     0.198802     0.714441    -0.123646  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z7       trt:Z8       trt:Z9      trt:Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.61286      0.10645      0.05364     -0.29701  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.066634     0.093100    -0.425433     0.141921  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom: 499 Total (i.e. Null);  478 Residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    684.9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 617.9 	AIC: 661.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    685.4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 624.5 	AIC: 668.5</span>
 </code></pre></div>
     </div>
   </div>
@@ -178,11 +188,13 @@ whether b1 is negative or positive if not given)</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
+Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

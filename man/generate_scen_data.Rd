@@ -33,5 +33,5 @@ total there are hence 4x2x5=40 scenarios.
 }
 \examples{
 data(scen_param) ## scenarios used in XYZ
-dat <- generate_scen_data(scen = scen_param[1,])
+dat <- generate_scen_data(scen = scen_param[1, ])
 }

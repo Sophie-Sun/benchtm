@@ -17,6 +17,9 @@ get_b(
   start = c(0, 0),
   sign_better = 1,
   sigma_error,
+  lambda0,
+  cens_time,
+  t_mile,
   optim_method = "Nelder-Mead"
 )
 }
@@ -54,6 +57,14 @@ test only)}
 
 \item{sigma_error}{Residual variance assumed for type = "continuous"}
 
+\item{lambda0}{Intercept of exponential regression (on non-log scale)}
+
+\item{cens_time}{Function to generate the censoring time, only
+needed for data_type = "survival"}
+
+\item{t_mile}{Time point for comparing survival probabilities for overall
+test for treatment effect}
+
 \item{optim_method}{method argument in the optimization see ?optim}
 }
 \value{
@@ -81,14 +92,18 @@ helps to modify start and optim_method arguments.
 }
 \examples{
 scal <- 100
-X <- generate_X_dist(n=500*scal, p=30, rho=0.5)
-trt <- generate_trt(n=500*scal, p_trt = 0.5)
+X <- generate_X_dist(n = 500 * scal, p = 30, rho = 0.5)
+trt <- generate_trt(n = 500 * scal, p_trt = 0.5)
 prog <- "0.5*((X1=='Y')+X11)"
 pred <- "X11>0.5"
-get_b(X, scal, prog, pred, trt, type="continuous",
-      power = c(0.9, 0.9), alpha = c(0.025, 0.1),
-      start=c(0,0), sigma_error=1)
-get_b(X, scal, prog, pred, trt, type = "binary",
-      power = c(0.9, 0.9), alpha = c(0.025, 0.1),
-      start=c(0,0))
+get_b(X, scal, prog, pred, trt,
+  type = "continuous",
+  power = c(0.9, 0.9), alpha = c(0.025, 0.1),
+  start = c(0, 0), sigma_error = 1
+)
+get_b(X, scal, prog, pred, trt,
+  type = "binary",
+  power = c(0.9, 0.9), alpha = c(0.025, 0.1),
+  start = c(0, 0)
+)
 }

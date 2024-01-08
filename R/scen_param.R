@@ -18,6 +18,8 @@
 #' scenarios.
 #'
 #' @format See more details on the choice of parameters considered in
-#' \url{https://htmlpreview.github.io/?https://raw.githubusercontent.com/Sophie-Sun/benchtm/master/docs/articles/a01_User_guidance.html}
-
+#' \url{https://pubmed.ncbi.nlm.nih.gov/36437036/}
+#'
+#' @source See more details on the the data cases in \url{https://pubmed.ncbi.nlm.nih.gov/36437036/}
+#'
 "scen_param"

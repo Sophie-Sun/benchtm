@@ -17,6 +17,9 @@ get_b0(
   alpha = 0.025,
   sign_better = 1,
   sigma_error,
+  lambda0,
+  cens_time,
+  t_mile,
   interval = c(-5, 5)
 )
 }
@@ -54,6 +57,14 @@ test only)}
 
 \item{sigma_error}{Residual variance assumed for type = "continuous"}
 
+\item{lambda0}{Intercept of exponential regression (on non-log scale)}
+
+\item{cens_time}{Function to generate the censoring time, only
+needed for data_type = "survival"}
+
+\item{t_mile}{Time point for comparing survival probabilities for overall
+test for treatment effect}
+
 \item{interval}{Interval to search for b0 handed over to uniroot}
 }
 \value{
@@ -77,12 +88,16 @@ example above).
 \examples{
 
 scal <- 100
-X <- generate_X_dist(n=500*scal, p=30, rho=0.5)
-trt <- generate_trt(n=500*scal, p_trt = 0.5)
+X <- generate_X_dist(n = 500 * scal, p = 30, rho = 0.5)
+trt <- generate_trt(n = 500 * scal, p_trt = 0.5)
 prog <- "0.5*((X1=='Y')+X11)"
 pred <- "X11>0.5"
-get_b0(X, scal, prog, pred, trt, b1 = 0.5, type="continuous",
-       power = 0.9, alpha = 0.025, interval=c(-2,2), sigma_error=1)
-get_b0(X, scal, prog, pred, trt, b1 = 0.5, type = "binary",
-       power = 0.9, alpha = 0.025, interval=c(-2,2))
+get_b0(X, scal, prog, pred, trt,
+  b1 = 0.5, type = "continuous",
+  power = 0.9, alpha = 0.025, interval = c(-2, 2), sigma_error = 1
+)
+get_b0(X, scal, prog, pred, trt,
+  b1 = 0.5, type = "binary",
+  power = 0.9, alpha = 0.025, interval = c(-2, 2)
+)
 }

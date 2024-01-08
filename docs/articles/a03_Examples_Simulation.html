@@ -97,11 +97,25 @@
 <div class="section level2">
 <h2 id="simulation-example-using-benchtm">Simulation example using “benchtm”<a class="anchor" aria-label="anchor" href="#simulation-example-using-benchtm"></a>
 </h2>
-<p>In this section a simple simulation study is performed on subgroup identification using ``benchtm’’ package. In this given example, the interest is to compare the MSE of estimated individual treatment effect from two methods: multivariate regression<span class="citation">(Seber and Lee 2012)</span> and Model-based recursive partition (MOB)<span class="citation">(Athey and Imbens 2016)</span>. For MOB, we build node model <span class="math inline">\(Y = \beta_0 + \beta_1*trt + \beta_2*X\)</span>, where <span class="math inline">\(X\)</span> is the union of selected variables from lasso model <span class="math inline">\(Y = \beta_0^* + \beta_1^*X\)</span> on treatment subset and control subset separately. Users could modify this part of the code by implementing their own method and metrics for a comparison.</p>
-<p>We generate the simulation data with <span class="math inline">\(f_{prog}(X) = 0.5*(X_3+X_7)\)</span> and <span class="math inline">\(f_{pred}(X) = X_3\)</span> with <span class="math inline">\(\beta_0 =0, \beta_1=2\)</span>. We fix the total number of covariates as <span class="math inline">\(p=20\)</span> and vary the sample size from <span class="math inline">\(n = 200\)</span> to <span class="math inline">\(n = 1000\)</span>. The simulation is replicated for 100 times in each scenario.</p>
+<p>In this section a simple simulation study is performed on subgroup
+identification using ``benchtm’’ package. In this given example, the
+interest is to compare the MSE of estimated individual treatment effect
+from two methods: multivariate regression<span class="citation">(Seber
+and Lee 2012)</span> and Model-based recursive partition (MOB)<span class="citation">(Athey and Imbens 2016)</span>. For MOB, we build node
+model <span class="math inline">\(Y = \beta_0 + \beta_1*trt +
+\beta_2*X\)</span>, where <span class="math inline">\(X\)</span> is the
+union of selected variables from lasso model <span class="math inline">\(Y = \beta_0^* + \beta_1^*X\)</span> on treatment
+subset and control subset separately. Users could modify this part of
+the code by implementing their own method and metrics for a
+comparison.</p>
+<p>We generate the simulation data with <span class="math inline">\(f_{prog}(X) = 0.5*(X_3+X_7)\)</span> and <span class="math inline">\(f_{pred}(X) = X_3\)</span> with <span class="math inline">\(\beta_0 =0, \beta_1=2\)</span>. We fix the total
+number of covariates as <span class="math inline">\(p=20\)</span> and
+vary the sample size from <span class="math inline">\(n = 200\)</span>
+to <span class="math inline">\(n = 1000\)</span>. The simulation is
+replicated for 100 times in each scenario.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">benchtm</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://glmnet.stanford.edu" class="external-link">glmnet</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### generate simulation data</span></span>
@@ -149,7 +163,7 @@
 <span>    <span class="co">## selected variables</span></span>
 <span>    <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span></span>
 <span>  <span class="op">}</span></span>
-<span>  <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/setops.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/setops.html" class="external-link">union</a></span><span class="op">(</span><span class="fu">get_fit_vars</span><span class="op">(</span><span class="va">fit0</span><span class="op">)</span>, <span class="fu">get_fit_vars</span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span><span class="op">)</span>,<span class="st">"(Intercept)"</span><span class="op">)</span></span>
+<span>  <span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">union</a></span><span class="op">(</span><span class="fu">get_fit_vars</span><span class="op">(</span><span class="va">fit0</span><span class="op">)</span>, <span class="fu">get_fit_vars</span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span><span class="op">)</span>,<span class="st">"(Intercept)"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">vars</span>, <span class="kw">function</span><span class="op">(</span><span class="va">xx</span><span class="op">)</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split</a></span><span class="op">(</span><span class="va">xx</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
@@ -201,21 +215,26 @@
 <span><span class="va">var_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">500</span>,<span class="fl">800</span>, <span class="fl">1000</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">sim_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">var_change</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">vars</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu">sim_run_cont</span><span class="op">(</span>n <span class="op">=</span> <span class="va">vars</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, p <span class="op">=</span> <span class="fl">20</span>, seed <span class="op">=</span> <span class="va">vars</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">sim_result</span>, <span class="st">"sim_result.rds"</span><span class="op">)</span></span></code></pre></div>
-<p>We could make a plot to compare the MSE of the estimated treatment effect vs. the true treatment effect.</p>
+<p>We could make a plot to compare the MSE of the estimated treatment
+effect vs. the true treatment effect.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">sim_result</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">n</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>mean_mse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mse</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mean_mse</span>, group <span class="op">=</span> <span class="va">method</span>, color <span class="op">=</span> <span class="va">method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a03_Examples_Simulation_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-athey2016recursive" class="csl-entry">
-Athey, Susan, and Guido Imbens. 2016. <span>“Recursive Partitioning for Heterogeneous Causal Effects.”</span> <em>Proceedings of the National Academy of Sciences</em> 113 (27): 7353–60.
+Athey, Susan, and Guido Imbens. 2016. <span>“Recursive Partitioning for
+Heterogeneous Causal Effects.”</span> <em>Proceedings of the National
+Academy of Sciences</em> 113 (27): 7353–60.
 </div>
 <div id="ref-seber2012linear" class="csl-entry">
-Seber, George AF, and Alan J Lee. 2012. <em>Linear Regression Analysis</em>. Vol. 329. John Wiley &amp; Sons.
+Seber, George AF, and Alan J Lee. 2012. <em>Linear Regression
+Analysis</em>. Vol. 329. John Wiley &amp; Sons.
 </div>
 </div>
 </div>
@@ -233,12 +252,14 @@ Seber, George AF, and Alan J Lee. 2012. <em>Linear Regression Analysis</em>. Vol
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen.</p>
+<p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
+Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>

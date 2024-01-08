@@ -102,7 +102,10 @@ in one can then scale up the covariance matrix estimate (e.g. by
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">type</span>,</span>
 <span>  <span class="va">sign_better</span>,</span>
-<span>  <span class="va">sigma_error</span></span>
+<span>  <span class="va">sigma_error</span>,</span>
+<span>  <span class="va">lambda0</span>,</span>
+<span>  <span class="va">cens_time</span>,</span>
+<span>  <span class="va">t_mile</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,6 +139,13 @@ response is better (used in power calculation for the overall
 test only)</p></dd>
 <dt>sigma_error</dt>
 <dd><p>Residual variance assumed for type = "continuous"</p></dd>
+<dt>lambda0</dt>
+<dd><p>Intercept of exponential regression (on non-log scale)</p></dd>
+<dt>cens_time</dt>
+<dd><p>function that generates random censoring times</p></dd>
+<dt>t_mile</dt>
+<dd><p>time-point for comparing the survival probabilities
+for test of overall treatment effect</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -146,25 +156,33 @@ test only)</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">###### generate a matrix of covariates</span></span></span>
 <span class="r-in"><span><span class="va">scal</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">500</span><span class="op">*</span><span class="va">scal</span>, p<span class="op">=</span><span class="fl">30</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">500</span><span class="op">*</span><span class="va">scal</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500</span> <span class="op">*</span> <span class="va">scal</span>, p <span class="op">=</span> <span class="fl">30</span>, rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_trt.html">generate_trt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500</span> <span class="op">*</span> <span class="va">scal</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prog</span> <span class="op">&lt;-</span> <span class="st">"0.5*((X1=='Y')+X11)"</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="st">"X11&gt;0.5"</span></span></span>
 <span class="r-in"><span><span class="va">pred_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">X</span>, <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">pred</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prog_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">X</span>, <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">prog</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span>b<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
-<span class="r-in"><span>           type<span class="op">=</span><span class="st">"continuous"</span>, sigma_error<span class="op">=</span><span class="fl">1</span>, sign_better<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">1</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025 0.100</span>
-<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span>b<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.3</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
-<span class="r-in"><span>           type<span class="op">=</span><span class="st">"continuous"</span>, sigma_error<span class="op">=</span><span class="fl">1</span>, sign_better<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7964321 0.6070936</span>
-<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span>b<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
-<span class="r-in"><span>           type<span class="op">=</span><span class="st">"binary"</span>, sign_better<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.3</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">1</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7954262 0.6079201</span>
+<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"binary"</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025 0.100</span>
-<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span>b<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0.8</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
-<span class="r-in"><span>           type<span class="op">=</span><span class="st">"binary"</span>, sign_better<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9159443 0.5884964</span>
+<span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.8</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"binary"</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9149188 0.5890856</span>
 </code></pre></div>
     </div>
   </div>
@@ -175,11 +193,13 @@ test only)</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
+Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

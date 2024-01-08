@@ -10,7 +10,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -30,8 +29,7 @@ As demonstration, we will use data from [Prostate cancer patients](http://portal
 
 ```{r}
 library(benchtm)
-library(tidyverse)
-library(clustMD)
+library(dplyr)
 library(survival)
 library(haven)
 
@@ -67,18 +65,24 @@ From the main model, we can see that Bone metastasis (BM), History of cardiovasc
 
 ```{r}
 library(ggplot2)
-library(survminer)
+# library(survminer)
 
 # coefficients obtained from model.inter
-prog_use <- " -4.030 +1.0830 *BM + 0.347 *HX - 0.13*AGE_cat"
+prog_use <- " 1.0830 *BM + 0.347 *HX - 0.13*AGE_cat"
 pred_use <- "-0.603 * BM + 0.27 * HX + 0.81 * AGE_cat"
 b0_use <- -0.897
 b1_use <- 1
+lambda0 <- exp(-4.030)
+max_surv <- max(dat$SURVTIME)
 
+cens_time <- function(n){
+  tmp <- rexp(n, rate = 0.01)
+  sapply(tmp, function(x) min(x, max_surv))
+}
 set.seed(1)
 dat_generate <- generate_y(X = dat %>% select(BM, HX, AGE_cat), trt = dat$RX, 
                            prog = prog_use, pred = pred_use, b0 = b0_use, b1 = b1_use,
-                          type = "survival", cens_time = max(dat$SURVTIME))
+                          type = "survival", cens_time = cens_time, lambda0 = lambda0)
 head(dat_generate)
 ```
 
@@ -91,7 +95,7 @@ dat_combine <- dat_generate %>% select(Y, event) %>%
 
 ## compare ovserved and generated survival time 
 fit <- survfit(Surv(SURVTIME, CENS) ~ cat, data = dat_combine)
-ggsurvplot(fit, data = dat_combine, size = 1, palette = c("#E7B800", "#2E9FDF"), 
+survminer::ggsurvplot(fit, data = dat_combine, size = 1, palette = c("#E7B800", "#2E9FDF"), 
           conf.int = TRUE,  pval = TRUE,  risk.table = TRUE,  risk.table.col = "strata",
           legend.labs = c("Generated", "Observed"),  risk.table.height = 0.25,  
           ggtheme = theme_bw() 
@@ -111,9 +115,9 @@ loglikratio_null <- sapply(1:1000, function(seed){
   set.seed(seed)
   # prog and pred are based on main model without interaction
   dat_generate <- generate_y(X = dat %>% select(BM, HX, AGE_cat), trt = dat$RX, 
-                             prog = "-4.376 +0.719 *BM + 0.465 *HX +0.269*AGE_cat", 
+                             prog = "0.719 *BM + 0.465 *HX +0.269*AGE_cat", 
                              pred = "0", b0 = -0.193, b1 = 0,
-                             type = "survival", cens_time = max(dat$SURVTIME))
+                             type = "survival", cens_time = cens_time, lambda0 = exp(-4.376))
   model.full <- coxph(Surv(Y, event) ~  trt * (BM +  HX +  AGE_cat), data = dat_generate)
   model.null <- coxph(Surv(Y, event) ~ trt + BM + HX + AGE_cat, data = dat_generate)
   (model.full$loglik - model.null$loglik)[2]*(2)

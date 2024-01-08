@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 
 ```
 
-
 ## Simulation example using "benchtm"
 In this section a simple simulation study is performed on subgroup identification using ``benchtm'' package. In this given example, the interest is to compare the MSE of estimated individual treatment effect from two methods: multivariate regression[@seber2012linear] and Model-based recursive partition (MOB)[@athey2016recursive]. For MOB, we build node model $Y = \beta_0 + \beta_1*trt + \beta_2*X$, where $X$ is the union of selected variables from lasso model $Y = \beta_0^* + \beta_1^*X$ on treatment subset and control subset separately. Users could modify this part of the code by implementing their own method and metrics for a comparison.
 
@@ -29,7 +28,7 @@ We generate the simulation data with $f_{prog}(X) = 0.5*(X_3+X_7)$ and $f_{pred}
 
 ```{r eval = FALSE}
 library(benchtm)
-library(tidyverse)
+library(dplyr)
 library(glmnet)
 
 ### generate simulation data
@@ -140,6 +139,7 @@ sim_result <- readRDS("sim_result.rds")
 ```{r}
 library(ggplot2)
 library(dplyr)
+
 sim_result %>% group_by(method, n) %>% summarize(mean_mse = mean(mse)) %>% ungroup() %>%
   ggplot(aes(n, mean_mse, group = method, color = method)) + geom_point() + geom_line() + theme_bw()
 

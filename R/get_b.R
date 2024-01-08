@@ -42,49 +42,67 @@
 #'   response is better (used in power calculation for the overall
 #'   test only)
 #' @param sigma_error Residual variance assumed for type = "continuous"
+#' @param lambda0 Intercept of exponential regression (on non-log scale)
+#' @param cens_time Function to generate the censoring time, only
+#'   needed for data_type = "survival"
+#' @param t_mile Time point for comparing survival probabilities for overall
+#'   test for treatment effect
 #' @param optim_method method argument in the optimization see ?optim
 #' @return Vector of two model parameters b0 and b1
 #' @export
 #' @examples
 #' scal <- 100
-#' X <- generate_X_dist(n=500*scal, p=30, rho=0.5)
-#' trt <- generate_trt(n=500*scal, p_trt = 0.5)
+#' X <- generate_X_dist(n = 500 * scal, p = 30, rho = 0.5)
+#' trt <- generate_trt(n = 500 * scal, p_trt = 0.5)
 #' prog <- "0.5*((X1=='Y')+X11)"
 #' pred <- "X11>0.5"
-#' get_b(X, scal, prog, pred, trt, type="continuous",
-#'       power = c(0.9, 0.9), alpha = c(0.025, 0.1),
-#'       start=c(0,0), sigma_error=1)
-#' get_b(X, scal, prog, pred, trt, type = "binary",
-#'       power = c(0.9, 0.9), alpha = c(0.025, 0.1),
-#'       start=c(0,0))
+#' get_b(X, scal, prog, pred, trt,
+#'   type = "continuous",
+#'   power = c(0.9, 0.9), alpha = c(0.025, 0.1),
+#'   start = c(0, 0), sigma_error = 1
+#' )
+#' get_b(X, scal, prog, pred, trt,
+#'   type = "binary",
+#'   power = c(0.9, 0.9), alpha = c(0.025, 0.1),
+#'   start = c(0, 0)
+#' )
 get_b <- function(X, scal, prog, pred, trt, type,
-                  power = c(0.9, 0.8), alpha = c(0.025, 0.1), start=c(0,0),
-                  sign_better = 1, sigma_error, optim_method = "Nelder-Mead"){
-
+                  power = c(0.9, 0.8), alpha = c(0.025, 0.1), start = c(0, 0),
+                  sign_better = 1, sigma_error, lambda0, cens_time, t_mile,
+                  optim_method = "Nelder-Mead") {
   stopifnot(nrow(X) == length(trt), is.character(prog), is.character(pred))
   stopifnot(type %in% c("continuous", "binary", "count", "survival"))
-  
-  if(type %in% c("count", "survival"))
+
+  if (type %in% c("count")) {
     stop(sprintf("%s not implemented yet", type))
-  if(any(power < alpha))
+  }
+  if (any(power < alpha)) {
     stop("All elements in power need to be > alpha")
-  
+  }
+
   ## generate prognostic and predictive covariates
   pred_vals <- with(X, eval(parse(text = pred)))
   prog_vals <- with(X, eval(parse(text = prog)))
 
-  opt <- optim(function(b, ...){
-    sq <- (calc_power(b, ...) - power)^2
-    sqrt(sum(sq))
-  }, par=start, scal = scal, prog_vals=prog_vals, trt=trt, pred_vals=pred_vals, alpha = alpha, 
-  type = type, sign_better = sign_better, sigma_error = sigma_error, method = optim_method)
+  opt <- optim(
+    function(b, ...) {
+      sq <- (calc_power(b, ...) - power)^2
+      sqrt(sum(sq))
+    },
+    par = start, scal = scal, prog_vals = prog_vals, trt = trt, pred_vals = pred_vals, alpha = alpha,
+    type = type, sign_better = sign_better, sigma_error = sigma_error,
+    lambda0 = lambda0, cens_time = cens_time, t_mile = t_mile, method = optim_method
+  )
   out <- opt$par
-  outpow <- calc_power(out, scal=scal, prog_vals=prog_vals, trt=trt, pred_vals=pred_vals,
-                      alpha = alpha, type = type,
-                      sign_better = sign_better, sigma_error = sigma_error)
+  outpow <- calc_power(out,
+    scal = scal, prog_vals = prog_vals, trt = trt, pred_vals = pred_vals,
+    alpha = alpha, type = type,
+    sign_better = sign_better, sigma_error = sigma_error,
+    lambda0 = lambda0, cens_time = cens_time, t_mile = t_mile
+  )
   attr(out, "power_results") <- outpow
-  if(any(abs(outpow-power) > 0.01))
+  if (any(abs(outpow - power) > 0.01)) {
     message("optimization failed, try different starting value or optim_method")
+  }
   out
 }
-

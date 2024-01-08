@@ -15,21 +15,33 @@
 #' considered). The other 4 scenarios correspond to 0, 0.5, 1.5, 2 times
 #' the b1 value that provides 80% power of the interaction test. In
 #' total there are hence 4x2x5=40 scenarios.
-#' 
-#' @param scen A row from the scen_param data set
+#'
+#' @param scen A row from the scen_param data set or scen_param_TTE data set for time-to-event data
 #' @param include_truth Boolean, will the true treatment effect be included in the outcome data-set?
 #' @return A data frame
 #' @export
 #' @examples
 #' data(scen_param) ## scenarios used in XYZ
-#' dat <- generate_scen_data(scen = scen_param[1,])
-generate_scen_data <- function(scen, include_truth = TRUE){
+#' dat <- generate_scen_data(scen = scen_param[1, ])
+generate_scen_data <- function(scen, include_truth = TRUE) {
   X <- generate_X_syn(n = 500)
   trt <- generate_trt(n = 500, p_trt = 0.5)
-  generate_y(X=X, trt=trt, 
-             prog = scen$prog, pred = scen$pred,
-             b0 = scen$b0, b1 = scen$b1,
-             type = scen$type,
-             sigma_error = 1,
-             include_truth = include_truth)
+  ## for survival cases
+  lambda0 <- 0.0002
+  cens_time <- function(n) {
+    p <- sample(0:1, n, replace = TRUE, prob = c(0.05, 0.95))
+    r1 <- runif(n, 0, 1000)
+    r2 <- 1000 + (2000 - 1000) * rbeta(n, 1, 1.5)
+    (1 - p) * r1 + p * r2
+  }
+  generate_y(
+    X = X, trt = trt,
+    prog = scen$prog, pred = scen$pred,
+    b0 = scen$b0, b1 = scen$b1,
+    type = scen$type,
+    sigma_error = 1,
+    cens_time = cens_time,
+    lambda0 = lambda0,
+    include_truth = include_truth
+  )
 }

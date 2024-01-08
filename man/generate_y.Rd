@@ -15,7 +15,8 @@ generate_y(
   type = c("binary", "continuous", "count", "survival"),
   sigma_error = 1,
   theta = 1,
-  cens_time = 2,
+  cens_time = NULL,
+  lambda0 = NULL,
   include_truth = FALSE,
   sign_better = 1
 )
@@ -47,16 +48,19 @@ this is assumed to be on the log scale.}
 "continuous"}
 
 \item{theta}{Overdispersion parameter, only needed for data_type =
-"count" (variance of neg bin in this parameterization is mu + mu^2/theta)}
+"count" (variance of neg bin in this parameterization is mu +
+mu^2/theta)}
 
-\item{cens_time}{Maximum follow-up time, only needed for data_type
-= "survival"}
+\item{cens_time}{Function to generate the censoring time, only
+needed for data_type = "survival"}
 
-\item{include_truth}{boolean, will the true prognostic and predictive
-effects be included in the outcome data-set?}
+\item{lambda0}{Intercept of exponential regression (on non-log scale)}
 
-\item{sign_better}{whether larger response is better (used to determine
-whether b1 is negative or positive if not given)}
+\item{include_truth}{boolean, will the true prognostic and
+predictive effects be included in the outcome data-set?}
+
+\item{sign_better}{whether larger response is better (used to
+determine whether b1 is negative or positive if not given)}
 }
 \value{
 Data set
@@ -69,21 +73,27 @@ logit response probility, for count data the log-rate and for
 survival data the log-hazard rate.
 }
 \examples{
-X <- generate_X_dist(n=10000, p=10, rho=0.5)
+X <- generate_X_dist(n = 10000, p = 10, rho = 0.5)
 ## observational data set
-trt <- generate_trt(n=nrow(X), type = "random", X=X, prop= "X2")
-dat <- generate_y(X, trt, prog = "0.5*((X1=='Y')+X3)",
-                  pred = "X3>0", b0 = 0, b1 = 1,
-                  type = "continuous", sigma_error = 3)
+trt <- generate_trt(n = nrow(X), type = "random", X = X, prop = "X2")
+dat <- generate_y(X, trt,
+  prog = "0.5*((X1=='Y')+X3)",
+  pred = "X3>0", b0 = 0, b1 = 1,
+  type = "continuous", sigma_error = 3
+)
 
 
 #### generate data from user specified covariate X
-X <- sapply(1:10, function(ii) {rnorm(500)})
+X <- sapply(1:10, function(ii) {
+  rnorm(500)
+})
 X <- as.data.frame(X)
 colnames(X) <- paste0("Z", 1:10)
 trt <- generate_trt(nrow(X), p_trt = 0.5)
-dat <- generate_y(X, trt, prog = "0.5*Z1",
-                  pred = "(Z5>0)", b0 = 0, b1 = 1,
-                  type = "binary")
-glm(Y~trt*., data=dat, family=binomial)
+dat <- generate_y(X, trt,
+  prog = "0.5*Z1",
+  pred = "(Z5>0)", b0 = 0, b1 = 1,
+  type = "binary"
+)
+glm(Y ~ trt * ., data = dat, family = binomial)
 }
