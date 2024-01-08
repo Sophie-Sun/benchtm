@@ -1,10 +1,7 @@
 destination: docs
 
-
 home:
   links:
   - text: Submit issues
     href: https://github.com/Sophie-Sun/benchtm/issues
-
-
 
