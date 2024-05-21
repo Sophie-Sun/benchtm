@@ -18,13 +18,22 @@
 #'
 #' @param scen A row from the scen_param data set or scen_param_TTE data set for time-to-event data
 #' @param include_truth Boolean, will the true treatment effect be included in the outcome data-set?
+#' @param type For type == "sample" (default) X is generated using R package synthpop (using function
+#'  generate_X_syn). For type == "resample" data are resampled from a large saved data-set generated
+#'   from generate_X_syn (this option is considerably faster).
 #' @return A data frame
 #' @export
 #' @examples
 #' data(scen_param) ## scenarios used in XYZ
 #' dat <- generate_scen_data(scen = scen_param[1, ])
-generate_scen_data <- function(scen, include_truth = TRUE) {
-  X <- generate_X_syn(n = 500)
+generate_scen_data <- function(scen, include_truth = TRUE, type = c("sample", "resample")) {
+  type <- match.arg(type)
+  if(type == "resample"){
+    ind <- sample(1:50000, 500)
+    X <- X_large_pop[ind, ]
+  }else{
+    X <- generate_X_syn(n = 500)
+  }
   trt <- generate_trt(n = 500, p_trt = 0.5)
   ## for survival cases
   lambda0 <- 0.0002

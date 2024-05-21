@@ -1,3 +1,9 @@
+# benchtm 0.3.1 (April 19th, 2024)
+
+* added a large X in system data for faster generation of X
+* function generate_scen_data.R had one more parameter type = c("resample", "sample")
+
+#######################################################
 # benchtm 0.3.0 (Jan.8th 2024)
 
 * added time-to-event endpoints and corresponding scenarios

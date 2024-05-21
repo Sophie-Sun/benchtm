@@ -4,12 +4,16 @@
 \alias{generate_scen_data}
 \title{Generate simulation data from pre-specified scenarios}
 \usage{
-generate_scen_data(scen, include_truth = TRUE)
+generate_scen_data(scen, include_truth = TRUE, type = c("sample", "resample"))
 }
 \arguments{
-\item{scen}{A row from the scen_param data set}
+\item{scen}{A row from the scen_param data set or scen_param_TTE data set for time-to-event data}
 
 \item{include_truth}{Boolean, will the true treatment effect be included in the outcome data-set?}
+
+\item{type}{For type == "sample" (default) X is generated using R package synthpop (using function
+generate_X_syn). For type == "resample" data are resampled from a large saved data-set generated
+ from generate_X_syn (this option is considerably faster).}
 }
 \value{
 A data frame

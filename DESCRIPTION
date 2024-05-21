@@ -1,7 +1,7 @@
 Package: benchtm
 Type: Package
 Title: Benchmarking heterogeneous treatment effects in clinical trials
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: c(person("Sophie", "Sun", email = "sophie.sun@novartis.com", role = "cre"),
     person("Bjoern","Bornkamp", email = "bjoern.bornkamp@novartis.com", role = "aut"),
     person("Jiarui", "Lu", email = "jiarui.lu@novartis.com", role = "aut"),
