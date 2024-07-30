@@ -19,6 +19,9 @@
     <loc>/articles/a03_Examples_Simulation.html</loc>
   </url>
   <url>
+    <loc>/articles/a04_synthetic_data.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -59,8 +62,5 @@
   </url>
   <url>
     <loc>/reference/scen_param.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scen_param_TTE.html</loc>
   </url>
 </urlset>

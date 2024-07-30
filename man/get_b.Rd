@@ -17,6 +17,7 @@ get_b(
   start = c(0, 0),
   sign_better = 1,
   sigma_error,
+  theta,
   lambda0,
   cens_time,
   t_mile,
@@ -56,6 +57,12 @@ response is better (used in power calculation for the overall
 test only)}
 
 \item{sigma_error}{Residual variance assumed for type = "continuous"}
+
+\item{theta}{overdispersion paramter for type = count". It is
+consistent with MASS::glm.nb and the (dprq)nbinom functions in R
+with the "size" parameter equal to theta. In this parameterization
+the negative binomial distribution converges to the Poisson
+distribution for theta goes to infinity.}
 
 \item{lambda0}{Intercept of exponential regression (on non-log scale)}
 

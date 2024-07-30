@@ -1,9 +1,10 @@
-pandoc: 2.19.2
-pkgdown: 2.0.2
+pandoc: 3.1.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   a01_User_guidance: a01_User_guidance.html
   a02_Examples_Real_Data: a02_Examples_Real_Data.html
   a03_Examples_Simulation: a03_Examples_Simulation.html
-last_built: 2024-01-08T21:09Z
+  a04_synthetic_data: a04_synthetic_data.html
+last_built: 2024-07-23T18:35Z
 

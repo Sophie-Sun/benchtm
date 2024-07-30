@@ -1,0 +1,74 @@
+---
+title: "Description of included synthetic data"
+vignette: >
+  %\VignetteIndexEntry{Description of included synthetic data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, warning=FALSE, message=FALSE, echo=FALSE}
+# library(benchtm)
+here::i_am("./vignettes/a04_synthetic_data.Rmd")
+library(dplyr)
+library(tidyverse)
+```
+
+As described in [Sun et al. (2024)](https://doi.org/10.1002/bimj.202100337) the data set is a synthetic data generated from a pool of clinical trial data. The ''synthpop'' function from the "synthpop" R package with default options was used to generate a synthetic version of the original data. For the sake of confidentiality we renamed the covariates into $X_1, X_2, \ldots, X_{30}$. In addition the factor levels of the categorical variables were renamed and the numeric variables were scaled into the interval $[0,1]$ by subtracting the smallest value and dividing by the range of values.  
+
+In what follows we provide marginal summaries of the variables $X_1, X_2, ... X_{30}$ using barplots and density plots. In addition an assessment of the correlations among the numeric variables is provided.
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.show="hold", out.width="100%"}
+load(here::here("./R/sysdata.rda"))
+### function for density plot
+library(ggplot2)
+plot_density <- function(x.var, data){
+  data %>% dplyr::select(x.var = x.var) %>%
+    ggplot(aes(x = x.var)) + 
+    geom_density(alpha = 0.25, color = "blue") + geom_rug() +
+    theme_bw() + ylab("")+ 
+    theme(axis.text.x = element_text(angle = 30, hjust = 1),
+                 legend.position = "none") + 
+    ggtitle(x.var) + xlab("")
+}
+######### univariate bar plot
+plot_bar <- function(x.var, data){
+  ## x.var categorical, y.car: binary, bar plot based on y.var
+   data %>% dplyr::select(x.var = x.var) %>%
+    ggplot(aes(x.var)) +
+   geom_bar(aes(y = after_stat(count/sum(count)), fill = "blue", alpha = 0.5)) +
+    theme_bw() + theme(axis.text.x = element_text(angle = 30, hjust = 1),
+                 legend.position = "none") +
+    ylab("Percentage") + xlab("") +
+    ggtitle(x.var)
+}
+
+pp_plots <- lapply(1:ncol(data_syn), function(ii){
+  if(class(data_syn[[ii]]) == "numeric"){
+    plot_density(colnames(data_syn)[ii], data_syn)
+  }else{
+    plot_bar(colnames(data_syn)[ii], data_syn)
+  }
+})
+
+res <- gridExtra::marrangeGrob(pp_plots, nrow = 2, ncol = 4, layout_matrix = matrix(1:8, nrow = 2, byrow = T))
+plot(res[[1]])
+plot(res[[2]])
+plot(res[[3]])
+plot(res[[4]])
+```
+
+The Kendall's correlation between the continuous covariates $X_5,X_{10}$ - $X_{30}$ is shown in the correlation plot below.  
+
+```{r, echo=FALSE, warning = FALSE, message=FALSE, fig.cap="Correlation for continuous variables for synthetic data"}
+### continuous correlation
+library(PerformanceAnalytics)
+chart.Correlation(as.matrix(data_syn %>% dplyr::select(X5,X10:X30)), histogram=FALSE, pch=19, method = "kendall")
+```
+

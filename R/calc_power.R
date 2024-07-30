@@ -32,6 +32,12 @@
 #' @param type type of data "continuous", "binary", "count" and
 #'   "survival" are allowed here, but calculations are only
 #'   implemented for "continuous" and "binary".
+#' @param theta overdispersion paramter for type = count". It is
+#'   consistent with MASS::glm.nb and the (dprq)nbinom functions in R
+#'   with the "size" parameter equal to theta. In this parameterization
+#'   the negative binomial distribution converges to the Poisson
+#'   distribution for theta goes to infinity.
+#' @param theta overdispersion parameter for type "count"
 #' @param sign_better 1 if larger response is better, -1 is smaller
 #'   response is better (used in power calculation for the overall
 #'   test only)
@@ -69,7 +75,7 @@
 #'   b = c(0.5, 0.8), scal, prog_vals, trt, pred_vals, alpha,
 #'   type = "binary", sign_better = 1
 #' )
-calc_power <- function(b, scal, prog_vals, trt, pred_vals, alpha, type, sign_better,
+calc_power <- function(b, scal, prog_vals, trt, pred_vals, alpha, type, theta, sign_better,
                        sigma_error, lambda0, cens_time, t_mile) {
   ## build design matrix
   X <- cbind(1, prog_vals, trt, trt * pred_vals)
@@ -94,6 +100,21 @@ calc_power <- function(b, scal, prog_vals, trt, pred_vals, alpha, type, sign_bet
     Vc <- solve(crossprod(X * sqrt(p * (1 - p))) / scal) # solve(t(X)%*%diag(p*(1-p))%*%X) # variance estimate for true model
     v1 <- Ep1 * (1 - Ep1) / n1
     v0 <- Ep0 * (1 - Ep0) / n0
+    se_ov <- sqrt(v1 + v0) * sqrt(scal)
+  }
+  if (type == "count") { # specific for count
+    ## use sqrt transformation
+    mu1 <- exp(prog_vals + b[1] + b[2] * pred_vals)
+    v1 <- mean(mu1 * (1 + mu1 / theta)) + var(mu1) # variance in single obs (law of total variance)
+    mu0 <- exp(prog_vals)
+    v0 <- mean(mu0 * (1 + mu0 / theta)) + var(mu0) # variance in single obs (law of total variance)
+    ## lambda1 - lambda0
+    delta_ov <- mean(mu1) - mean(mu0)
+    r <- exp(mu)
+    # solve(t(X)%*%diag(r*theta/(r+theta))%*%X) # variance estimate for true model
+    Vc <- solve(crossprod(X * sqrt(r * theta / (r + theta))) / scal)
+    v1 <- v1 / n1
+    v0 <- v0 / n0
     se_ov <- sqrt(v1 + v0) * sqrt(scal)
   }
   if (type == "survival") {

@@ -42,6 +42,11 @@
 #'   response is better (used in power calculation for the overall
 #'   test only)
 #' @param sigma_error Residual variance assumed for type = "continuous"
+#' @param theta overdispersion paramter for type = count". It is
+#'   consistent with MASS::glm.nb and the (dprq)nbinom functions in R
+#'   with the "size" parameter equal to theta. In this parameterization
+#'   the negative binomial distribution converges to the Poisson
+#'   distribution for theta goes to infinity.
 #' @param lambda0 Intercept of exponential regression (on non-log scale)
 #' @param cens_time Function to generate the censoring time, only
 #'   needed for data_type = "survival"
@@ -68,14 +73,11 @@
 #' )
 get_b <- function(X, scal, prog, pred, trt, type,
                   power = c(0.9, 0.8), alpha = c(0.025, 0.1), start = c(0, 0),
-                  sign_better = 1, sigma_error, lambda0, cens_time, t_mile,
+                  sign_better = 1, sigma_error, theta, lambda0, cens_time, t_mile,
                   optim_method = "Nelder-Mead") {
   stopifnot(nrow(X) == length(trt), is.character(prog), is.character(pred))
   stopifnot(type %in% c("continuous", "binary", "count", "survival"))
 
-  if (type %in% c("count")) {
-    stop(sprintf("%s not implemented yet", type))
-  }
   if (any(power < alpha)) {
     stop("All elements in power need to be > alpha")
   }
@@ -90,14 +92,14 @@ get_b <- function(X, scal, prog, pred, trt, type,
       sqrt(sum(sq))
     },
     par = start, scal = scal, prog_vals = prog_vals, trt = trt, pred_vals = pred_vals, alpha = alpha,
-    type = type, sign_better = sign_better, sigma_error = sigma_error,
+    type = type, sign_better = sign_better, sigma_error = sigma_error, theta = theta,
     lambda0 = lambda0, cens_time = cens_time, t_mile = t_mile, method = optim_method
   )
   out <- opt$par
   outpow <- calc_power(out,
     scal = scal, prog_vals = prog_vals, trt = trt, pred_vals = pred_vals,
     alpha = alpha, type = type,
-    sign_better = sign_better, sigma_error = sigma_error,
+    sign_better = sign_better, sigma_error = sigma_error, theta = theta,
     lambda0 = lambda0, cens_time = cens_time, t_mile = t_mile
   )
   attr(out, "power_results") <- outpow

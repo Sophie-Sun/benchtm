@@ -32,7 +32,7 @@ in one can then scale up the covariance matrix estimate (e.g. by
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -54,6 +54,9 @@ in one can then scale up the covariance matrix estimate (e.g. by
     </li>
     <li>
       <a href="../articles/a03_Examples_Simulation.html">Using benchtm for a Simulation</a>
+    </li>
+    <li>
+      <a href="../articles/a04_synthetic_data.html">Description of included synthetic data</a>
     </li>
   </ul></li>
 <li>
@@ -101,6 +104,7 @@ in one can then scale up the covariance matrix estimate (e.g. by
 <span>  <span class="va">pred_vals</span>,</span>
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">type</span>,</span>
+<span>  <span class="va">theta</span>,</span>
 <span>  <span class="va">sign_better</span>,</span>
 <span>  <span class="va">sigma_error</span>,</span>
 <span>  <span class="va">lambda0</span>,</span>
@@ -114,42 +118,71 @@ in one can then scale up the covariance matrix estimate (e.g. by
     <dl><dt>b</dt>
 <dd><p>Vector of length 2: Coefficient for treatment indicator
 and predictive term in the true model</p></dd>
+
+
 <dt>scal</dt>
 <dd><p>Scaling parameter for the covariance matrix</p></dd>
+
+
 <dt>prog_vals</dt>
 <dd><p>Vector of main effects (one value per patient)</p></dd>
+
+
 <dt>trt</dt>
 <dd><p>Vector of treatment indicators</p></dd>
+
+
 <dt>pred_vals</dt>
 <dd><p>Vector of predictive effects (one value per
 patient)</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>Vector of length 2, specifying the desired type 1
 error for the overall and the interaction test. The overall test
 is performed as a one-sided test (see also argument
 sign_better). The interaction test is performed as a two-sided
 test.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>type of data "continuous", "binary", "count" and
 "survival" are allowed here, but calculations are only
 implemented for "continuous" and "binary".</p></dd>
+
+
+<dt>theta</dt>
+<dd><p>overdispersion parameter for type "count"</p></dd>
+
+
 <dt>sign_better</dt>
 <dd><p>1 if larger response is better, -1 is smaller
 response is better (used in power calculation for the overall
 test only)</p></dd>
+
+
 <dt>sigma_error</dt>
 <dd><p>Residual variance assumed for type = "continuous"</p></dd>
+
+
 <dt>lambda0</dt>
 <dd><p>Intercept of exponential regression (on non-log scale)</p></dd>
+
+
 <dt>cens_time</dt>
 <dd><p>function that generates random censoring times</p></dd>
+
+
 <dt>t_mile</dt>
 <dd><p>time-point for comparing the survival probabilities
 for test of overall treatment effect</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Vector of two power values</p>
+    
+
+<p>Vector of two power values</p>
     </div>
 
     <div id="ref-examples">
@@ -172,7 +205,7 @@ for test of overall treatment effect</p></dd>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.3</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="st">"continuous"</span>, sigma_error <span class="op">=</span> <span class="fl">1</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7949921 0.6049537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7969131 0.6069333</span>
 <span class="r-in"><span><span class="fu">calc_power</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="st">"binary"</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
@@ -182,7 +215,7 @@ for test of overall treatment effect</p></dd>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.8</span><span class="op">)</span>, <span class="va">scal</span>, <span class="va">prog_vals</span>, <span class="va">trt</span>, <span class="va">pred_vals</span>, <span class="va">alpha</span>,</span></span>
 <span class="r-in"><span>  type <span class="op">=</span> <span class="st">"binary"</span>, sign_better <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9153692 0.5859205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9161490 0.5881828</span>
 </code></pre></div>
     </div>
   </div>
@@ -193,13 +226,11 @@ for test of overall treatment effect</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
-Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

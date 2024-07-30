@@ -99,10 +99,7 @@ generate_y <- function(X, trt, prog, pred, b0, b1 = NULL, sd_te = NULL,
     )
   }
   if (type == "count") { ## use negative binomial distribution
-    dat$duration <- stats::rlnorm(n, 0, 0.3) ## observation time per patient (need to adjust for using offset in model)
-    re <- stats::rgamma(n, theta, theta) ## gamma random effect per patient (-> will induce over-dispersion in count data)
-    lambda <- dat$duration * re * exp(y_link)
-    dat$Y <- stats::rpois(n, lambda)
+    dat$Y <- stats::rnbinom(n, size = theta, mu = exp(y_link))
     form_tmp <- paste0(
       "log(lambda) = ", prog, " + Trt*", "(",
       round(b0, 4), "+", round(b1, 4), "*(", pred, "))"

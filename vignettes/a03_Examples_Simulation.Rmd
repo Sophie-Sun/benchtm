@@ -133,7 +133,8 @@ saveRDS(sim_result, "sim_result.rds")
 ```
 We could make a plot to compare the MSE of the estimated treatment effect vs. the true treatment effect.
 ```{r echo = FALSE, eval = TRUE}
-sim_result <- readRDS("sim_result.rds")
+here::i_am("./vignettes/a03_Examples_Simulation.Rmd")
+sim_result <- readRDS(here::here("./vignettes/sim_result.rds"))
 ```
 
 ```{r}

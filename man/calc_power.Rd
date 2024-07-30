@@ -12,6 +12,7 @@ calc_power(
   pred_vals,
   alpha,
   type,
+  theta,
   sign_better,
   sigma_error,
   lambda0,
@@ -41,6 +42,8 @@ test.}
 \item{type}{type of data "continuous", "binary", "count" and
 "survival" are allowed here, but calculations are only
 implemented for "continuous" and "binary".}
+
+\item{theta}{overdispersion parameter for type "count"}
 
 \item{sign_better}{1 if larger response is better, -1 is smaller
 response is better (used in power calculation for the overall

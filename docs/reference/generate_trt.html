@@ -24,7 +24,7 @@ names specified in "prop" need to be handed over in a data frame "X".'><meta pro
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -46,6 +46,9 @@ names specified in "prop" need to be handed over in a data frame "X".'><meta pro
     </li>
     <li>
       <a href="../articles/a03_Examples_Simulation.html">Using benchtm for a Simulation</a>
+    </li>
+    <li>
+      <a href="../articles/a04_synthetic_data.html">Description of included synthetic data</a>
     </li>
   </ul></li>
 <li>
@@ -90,22 +93,33 @@ names specified in "prop" need to be handed over in a data frame "X".</p>
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>Total sample size</p></dd>
+
+
 <dt>p_trt</dt>
 <dd><p>Proportion of treatment assignment (default = 0.5)</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Either "exact" (proportion of p_trt is tried to match exactly), or
 "random" then treatment assignment is generated from a binomial distribution.</p></dd>
+
+
 <dt>X</dt>
 <dd><p>matrix/dataframe of predictor variables</p></dd>
+
+
 <dt>prop</dt>
 <dd><p>A formula used to generate logit(P(trt|X)). Probability of
 obtaining treatment is then Bin(1, P(trt|X)) with 
 P(trt|X) = 1/(1+exp(-prop)). If type = "random" and prop is not specified 
 p_trt is used in the binomial distribution</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Vector of treatment indicators</p>
+    
+
+<p>Vector of treatment indicators</p>
     </div>
 
     <div id="ref-examples">
@@ -121,13 +135,13 @@ p_trt is used in the binomial distribution</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span> <span class="co"># remaining patient randomly allocated</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> trt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0 1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 5 </span>
 <span class="r-in"><span><span class="co">## example for random allocation</span></span></span>
 <span class="r-in"><span><span class="va">trt</span> <span class="op">&lt;-</span> <span class="fu">generate_trt</span><span class="op">(</span><span class="fl">10</span>, p_trt <span class="op">=</span> <span class="fl">0.5</span>, type <span class="op">=</span> <span class="st">"random"</span><span class="op">)</span> <span class="co"># samples from binomial with p_trt = 0.5</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">trt</span><span class="op">)</span> <span class="co"># observed allocation may deviate from p_trt=0.5 for small samples</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> trt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0 1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 4 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## example, where treatment allocation depends on propensity model</span></span></span>
 <span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="generate_X_dist.html">generate_X_dist</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10000</span>, p<span class="op">=</span><span class="fl">10</span>, rho<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
@@ -141,33 +155,29 @@ p_trt is used in the binomial distribution</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> glm(formula = trt ~ ., family = binomial, data = dat)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deviance Residuals: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min       1Q   Median       3Q      Max  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.0117  -1.2278   0.6125   0.9364   1.2234  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.033807   0.061914  -0.546    0.585    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X1Y          0.044441   0.045642   0.974    0.330    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X2           1.008430   0.037481  26.905   &lt;2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X3           0.025555   0.027284   0.937    0.349    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X4          -0.019717   0.027283  -0.723    0.470    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X5Y          0.001205   0.051335   0.023    0.981    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X6M2        -0.006966   0.064527  -0.108    0.914    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X6M3         0.026441   0.064187   0.412    0.680    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X6M4         0.029834   0.064439   0.463    0.643    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X7          -0.031279   0.023008  -1.359    0.174    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X8           0.004195   0.022461   0.187    0.852    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X9           0.018258   0.022960   0.795    0.426    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X10          0.002700   0.023127   0.117    0.907    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.070667   0.061744  -1.145   0.2524    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X1Y         -0.011955   0.045543  -0.262   0.7929    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X2           1.038493   0.037639  27.591   &lt;2e-16 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X3          -0.015390   0.027208  -0.566   0.5716    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X4           0.018967   0.027019   0.702   0.4827    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X5Y          0.050035   0.051081   0.980   0.3273    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X6M2        -0.024738   0.063729  -0.388   0.6979    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X6M3         0.023012   0.064293   0.358   0.7204    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X6M4        -0.015852   0.064401  -0.246   0.8056    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X7          -0.015343   0.022743  -0.675   0.4999    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X8           0.001252   0.022563   0.055   0.9557    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X9           0.001686   0.022533   0.075   0.9404    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X10          0.049464   0.022766   2.173   0.0298 *  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 12309  on 9999  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 11233  on 9987  degrees of freedom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 11259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 12406  on 9999  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 11270  on 9987  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 11296</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -181,13 +191,11 @@ p_trt is used in the binomial distribution</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
-Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

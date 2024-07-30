@@ -31,7 +31,7 @@ total there are hence 4x2x5=40 scenarios."><meta property="og:image" content="/l
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -53,6 +53,9 @@ total there are hence 4x2x5=40 scenarios."><meta property="og:image" content="/l
     </li>
     <li>
       <a href="../articles/a03_Examples_Simulation.html">Using benchtm for a Simulation</a>
+    </li>
+    <li>
+      <a href="../articles/a04_synthetic_data.html">Description of included synthetic data</a>
     </li>
   </ul></li>
 <li>
@@ -91,19 +94,30 @@ total there are hence 4x2x5=40 scenarios.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_scen_data</span><span class="op">(</span><span class="va">scen</span>, include_truth <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_scen_data</span><span class="op">(</span><span class="va">scen</span>, include_truth <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample"</span>, <span class="st">"resample"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>scen</dt>
-<dd><p>A row from the scen_param data set</p></dd>
+<dd><p>A row from the scen_param data set or scen_param_TTE data set for time-to-event data</p></dd>
+
+
 <dt>include_truth</dt>
 <dd><p>Boolean, will the true treatment effect be included in the outcome data-set?</p></dd>
+
+
+<dt>type</dt>
+<dd><p>For type == "sample" (default) X is generated using R package synthpop (using function
+generate_X_syn). For type == "resample" data are resampled from a large saved data-set generated
+ from generate_X_syn (this option is considerably faster).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data frame</p>
+    
+
+<p>A data frame</p>
     </div>
 
     <div id="ref-examples">
@@ -122,13 +136,11 @@ total there are hence 4x2x5=40 scenarios.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
-Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

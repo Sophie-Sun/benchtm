@@ -61,7 +61,7 @@ head(dat)
 
 The treatment is generated based on randomized trial where $P(trt = 1) = 0.5$. We could fit a conditional tree using this generated data. 
 ```{r}
-cov.names <- dat %>% select(starts_with("X")) %>% colnames()
+cov.names <- dat %>% dplyr::select(starts_with("X")) %>% colnames()
 eqn <- paste0("Y ~ trt| ",
               paste0(cov.names, collapse = "+"))
 

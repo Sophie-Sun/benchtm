@@ -21,7 +21,7 @@ survival data the log-hazard rate."><meta property="og:image" content="/logo.png
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -43,6 +43,9 @@ survival data the log-hazard rate."><meta property="og:image" content="/logo.png
     </li>
     <li>
       <a href="../articles/a03_Examples_Simulation.html">Using benchtm for a Simulation</a>
+    </li>
+    <li>
+      <a href="../articles/a04_synthetic_data.html">Description of included synthetic data</a>
     </li>
   </ul></li>
 <li>
@@ -93,48 +96,77 @@ survival data the log-hazard rate.</p>
     <h2>Arguments</h2>
     <dl><dt>X</dt>
 <dd><p>matrix/dataframe of predictor variables</p></dd>
+
+
 <dt>trt</dt>
 <dd><p>Binary treatment indicator variable</p></dd>
+
+
 <dt>prog</dt>
 <dd><p>Character variable giving expression for prognostic
 effects (defined in terms of names in the X matrix)</p></dd>
+
+
 <dt>pred</dt>
 <dd><p>Character variable giving expression for predictive
 effects (defined in terms of names in the X matrix)</p></dd>
+
+
 <dt>b0</dt>
 <dd><p>Treatment (main effect)</p></dd>
+
+
 <dt>b1</dt>
 <dd><p>Coefficient of the predictive effects defined in pred</p></dd>
+
+
 <dt>sd_te</dt>
 <dd><p>Standard deviation of the treatment effects defined
 via pred. If given b1 is ignored. For binary data this is assumed
 to be on the log-odds ratio scale. For survival and count data
 this is assumed to be on the log scale.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>Outcome data type to generate ("continuous", "binary",
 "count" and "survival" are allowed here)</p></dd>
+
+
 <dt>sigma_error</dt>
 <dd><p>Residual error, only needed for type =
 "continuous"</p></dd>
+
+
 <dt>theta</dt>
 <dd><p>Overdispersion parameter, only needed for data_type =
 "count" (variance of neg bin in this parameterization is mu +
 mu^2/theta)</p></dd>
+
+
 <dt>cens_time</dt>
 <dd><p>Function to generate the censoring time, only
 needed for data_type = "survival"</p></dd>
+
+
 <dt>lambda0</dt>
 <dd><p>Intercept of exponential regression (on non-log scale)</p></dd>
+
+
 <dt>include_truth</dt>
 <dd><p>boolean, will the true prognostic and
 predictive effects be included in the outcome data-set?</p></dd>
+
+
 <dt>sign_better</dt>
 <dd><p>whether larger response is better (used to
 determine whether b1 is negative or positive if not given)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Data set</p>
+    
+
+<p>Data set</p>
     </div>
 
     <div id="ref-examples">
@@ -167,17 +199,17 @@ determine whether b1 is negative or positive if not given)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)          trt           Z1           Z2           Z3           Z4  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.01350      0.47261      0.60654      0.16560      0.14887     -0.20376  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.04097      0.66630      0.48682     -0.27904     -0.10889     -0.18297  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          Z5           Z6           Z7           Z8           Z9          Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.07988      0.06136      0.08060     -0.24266     -0.16971      0.16972  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.13666      0.06119     -0.01345     -0.21496      0.14267     -0.11297  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z1       trt:Z2       trt:Z3       trt:Z4       trt:Z5       trt:Z6  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.13985      0.03431      0.07774      0.12770      0.38401      0.17121  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.06650      0.09557     -0.01194      0.06109      0.48794     -0.10708  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      trt:Z7       trt:Z8       trt:Z9      trt:Z10  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.41840      0.26364      0.33624     -0.07224  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.06243      0.24723     -0.09472     -0.07955  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom: 499 Total (i.e. Null);  478 Residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    688.9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 599.8 	AIC: 643.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    679.6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 625.7 	AIC: 669.7</span>
 </code></pre></div>
     </div>
   </div>
@@ -188,13 +220,11 @@ determine whether b1 is negative or positive if not given)</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
-Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+  <p></p><p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

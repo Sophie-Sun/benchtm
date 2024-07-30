@@ -33,6 +33,8 @@ library(dplyr)
 library(survival)
 library(haven)
 
+here::i_am("./vignettes/a02_Examples_Real_Data.Rmd")
+
 ## BM:Bone metastasis, 
 ## HX:History of cardiovascular disease
 ## AGE:Age, years based on model; 
@@ -40,7 +42,7 @@ library(haven)
 ## SURVTIME: survival time, 
 ## CENS: 0 for censor and 1 for death 
 ## reference https://onlinelibrary.wiley.com/doi/10.1002/bimj.201500147
-dat <- read_sas("adv_prostate_ca.sas7bdat") %>% 
+dat <- read_sas(here::here("./vignettes/adv_prostate_ca.sas7bdat")) %>% 
   ## the SAS data in provided in https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002%2Fbimj.201500147&file=bimj1691-sup-0001-CodeData.zip
   select(BM, HX, AGE, SURVTIME, CENS, RX) %>% 
   mutate(AGE_cat = 1*(AGE > 65))
