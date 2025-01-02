@@ -24,8 +24,8 @@ from the synthpop R package. data_syn has 1934 rows and 30
 variables. Variable names have been removed. Continuous variables
 have been scaled to the interval [0,1], levels of the categorical
 variable have been blinded. For information on the synthetic data
-which synthpop generates from, see the supplementary material of
-the XYZ reference.
+which synthpop generates from, see the vignette: Description of
+included synthetic data.
 }
 \examples{
 X <- generate_X_syn(n=100)

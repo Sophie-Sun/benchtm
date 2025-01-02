@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">benchtm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1</span>
       </span>
     </div>
 
@@ -158,8 +158,8 @@ replicated for 100 times in each scenario.</p>
 <span>  <span class="va">Y1</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span><span class="op">!</span><span class="va">ind</span><span class="op">]</span></span>
 <span>  <span class="va">X0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data<span class="op">=</span><span class="va">X0</span>, split <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
 <span>  <span class="va">X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data<span class="op">=</span><span class="va">X1</span><span class="op">)</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
-<span>  <span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="fu">::</span><span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span><span class="va">X0</span>, <span class="va">Y0</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
-<span>  <span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="fu">::</span><span class="fu"><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">Y1</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
+<span>  <span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span><span class="va">X0</span>, <span class="va">Y0</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
+<span>  <span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu">glmnet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">cv.glmnet</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">Y1</span>, family <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">get_fit_vars</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span>, s<span class="op">=</span><span class="st">"lambda.1se"</span><span class="op">)</span></span>
@@ -255,12 +255,14 @@ Analysis</em>. Vol. 329. John Wiley &amp; Sons.
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
+<p>Developed by Sophie Sun, Bjoern Bornkamp, Jiarui Lu, Ardalan
+Mirshani, Kostas Sechidis, Yao Chen, Novartis.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
