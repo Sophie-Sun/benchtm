@@ -43,12 +43,14 @@ generate_scen_data <- function(scen, include_truth = TRUE, type = c("sample", "r
     r2 <- 1000 + (2000 - 1000) * rbeta(n, 1, 1.5)
     (1 - p) * r1 + p * r2
   }
+  theta <- 4.8
   generate_y(
     X = X, trt = trt,
     prog = scen$prog, pred = scen$pred,
     b0 = scen$b0, b1 = scen$b1,
     type = scen$type,
     sigma_error = 1,
+    theta = theta,
     cens_time = cens_time,
     lambda0 = lambda0,
     include_truth = include_truth

@@ -1,3 +1,8 @@
+# benchtm 0.4.1 (Jan 2nd, 2025)
+
+* modified the theta parameter in scenario generation to obtain similar power under b1_rel = 1.
+
+
 # benchtm 0.4.0 (July 23rd, 2024)
 
 * added count/negative binomial endpoints and corresponding scenarios
